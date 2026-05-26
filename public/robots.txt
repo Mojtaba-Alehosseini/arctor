@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://arctor.studio/sitemap-index.xml

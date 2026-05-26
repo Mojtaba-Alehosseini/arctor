@@ -1,0 +1,54 @@
+---
+import { t, type Locale, localePath } from "../i18n/config";
+import HeroCanvas from "./HeroCanvas.tsx";
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const dict = t(locale);
+---
+
+<section class="relative h-[100svh] min-h-[640px] w-full grain overflow-hidden bg-[var(--color-ink)] text-[var(--color-travertine)]">
+  <HeroCanvas client:load />
+
+  <div class="absolute inset-0 container-edge flex flex-col justify-between py-24 sm:py-28">
+    <div class="flex items-start justify-between text-eyebrow opacity-70">
+      <p>{dict.hero.eyebrow}</p>
+      <p class="hidden sm:block">{dict.hero.counterLabel} · 01 / 06</p>
+    </div>
+
+    <div class="relative max-w-[18ch] sm:max-w-[26ch] reveal-trigger">
+      <h1 class="text-display text-[clamp(2.5rem,7vw,6.5rem)] leading-[1.02]">
+        {dict.hero.headlineLines.map((line) => (
+          <span class="reveal-mask block">
+            <span class="reveal-line">{line}</span>
+          </span>
+        ))}
+      </h1>
+
+      <p class="mt-8 max-w-[44ch] text-base sm:text-lg opacity-80 leading-relaxed">
+        {dict.hero.intro}
+      </p>
+
+      <div class="mt-10 flex flex-wrap items-center gap-6">
+        <a
+          href={localePath(locale, "work")}
+          class="group inline-flex items-center gap-3 text-eyebrow link-underline"
+        >
+          <span>{dict.hero.cta}</span>
+          <span aria-hidden="true">→</span>
+        </a>
+        <a
+          href={localePath(locale, "contact")}
+          class="text-eyebrow opacity-60 hover:opacity-100 transition-opacity link-underline"
+        >
+          {dict.nav.contact}
+        </a>
+      </div>
+    </div>
+
+    <div class="flex items-end justify-between text-eyebrow opacity-60">
+      <p>{dict.hero.scrollHint} ↓</p>
+      <p class="hidden sm:block">N. 1 / 6 — Genoa · 44°24′N · 8°56′E</p>
+    </div>
+  </div>
+</section>

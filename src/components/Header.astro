@@ -1,0 +1,113 @@
+---
+import { t, LOCALES, LOCALE_SHORT, DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
+import Mark from "./Mark.astro";
+
+interface Props {
+  locale: Locale;
+  pathname: string;
+}
+const { locale, pathname } = Astro.props;
+const dict = t(locale);
+
+const navItems = [
+  { href: "work", label: dict.nav.work },
+  { href: "about", label: dict.nav.about },
+  { href: "services", label: dict.nav.services },
+  { href: "contact", label: dict.nav.contact },
+];
+---
+
+<header class="fixed inset-x-0 top-0 z-40 mix-blend-difference" data-header>
+  <div class="container-edge flex h-[68px] items-center justify-between text-[var(--color-travertine)]">
+    <a href={localePath(locale, "/")} class="flex items-center gap-2 text-eyebrow tracking-[0.18em] hover:opacity-70 transition-opacity">
+      <Mark class="w-5 h-5 text-current" />
+      <span>Arctor</span>
+    </a>
+
+    <!-- desktop nav -->
+    <nav class="hidden md:flex items-center gap-8 text-eyebrow">
+      {navItems.map((item) => (
+        <a href={localePath(locale, item.href)} class="link-underline">{item.label}</a>
+      ))}
+      <div class="flex items-center gap-3 ms-4 ps-4 border-s border-[color-mix(in_oklab,var(--color-travertine)_25%,transparent)]">
+        {LOCALES.map((l) => (
+          <a
+            href={localePath(l, pathname.replace(/^\/(en|it|de|fr|fa)\/?/, '/'))}
+            class={`text-[10px] tracking-[0.18em] uppercase transition-opacity hover:opacity-100 ${l === locale ? 'opacity-100' : 'opacity-50'}`}
+            aria-current={l === locale ? 'page' : undefined}
+          >
+            {LOCALE_SHORT[l]}
+          </a>
+        ))}
+      </div>
+    </nav>
+
+    <!-- mobile menu button -->
+    <button
+      class="md:hidden text-eyebrow tracking-[0.18em] flex items-center gap-2"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      data-mobile-menu-btn
+    >
+      <span data-menu-open>Menu</span>
+      <span data-menu-close class="hidden">Close</span>
+    </button>
+  </div>
+
+  <!-- mobile menu -->
+  <div
+    id="mobile-menu"
+    class="md:hidden fixed inset-0 z-30 bg-[var(--color-ink)] text-[var(--color-travertine)] transition-opacity duration-500 opacity-0 pointer-events-none"
+    data-mobile-menu
+  >
+    <div class="container-edge h-full flex flex-col justify-between pt-24 pb-16">
+      <nav class="flex flex-col gap-6">
+        {navItems.map((item) => (
+          <a
+            href={localePath(locale, item.href)}
+            class="text-display text-5xl sm:text-6xl tracking-tight"
+          >{item.label}</a>
+        ))}
+      </nav>
+      <div class="flex flex-wrap gap-4 text-eyebrow tracking-[0.18em] opacity-75">
+        {LOCALES.map((l) => (
+          <a
+            href={localePath(l, pathname.replace(/^\/(en|it|de|fr|fa)\/?/, '/'))}
+            class={`${l === locale ? 'opacity-100' : 'opacity-50'} hover:opacity-100 transition-opacity`}
+          >
+            {LOCALE_SHORT[l]}
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  (function () {
+    const btn = document.querySelector("[data-mobile-menu-btn]");
+    const menu = document.querySelector("[data-mobile-menu]");
+    if (!btn || !menu) return;
+    let open = false;
+    btn.addEventListener("click", () => {
+      open = !open;
+      btn.setAttribute("aria-expanded", String(open));
+      menu.style.opacity = open ? "1" : "0";
+      menu.style.pointerEvents = open ? "auto" : "none";
+      document.body.style.overflow = open ? "hidden" : "";
+      btn.querySelector("[data-menu-open]").classList.toggle("hidden", open);
+      btn.querySelector("[data-menu-close]").classList.toggle("hidden", !open);
+    });
+    menu.querySelectorAll("a").forEach((a) =>
+      a.addEventListener("click", () => {
+        open = false;
+        menu.style.opacity = "0";
+        menu.style.pointerEvents = "none";
+        document.body.style.overflow = "";
+        btn.setAttribute("aria-expanded", "false");
+        btn.querySelector("[data-menu-open]").classList.remove("hidden");
+        btn.querySelector("[data-menu-close]").classList.add("hidden");
+      })
+    );
+  })();
+</script>

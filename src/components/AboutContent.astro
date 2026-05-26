@@ -1,0 +1,82 @@
+---
+import { t, type Locale } from "../i18n/config";
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const dict = t(locale);
+---
+
+<section class="pt-36 sm:pt-44 pb-24 bg-[var(--color-travertine)] text-[var(--color-ink)]">
+  <div class="container-edge">
+    <p class="text-eyebrow opacity-60 mb-6">{dict.about.eyebrow}</p>
+    <h1 class="text-display text-[clamp(2.4rem,5.6vw,4.8rem)] leading-[1.04] max-w-[22ch] reveal-trigger">
+      <span class="reveal-mask block"><span class="reveal-line">{dict.about.title}</span></span>
+    </h1>
+  </div>
+</section>
+
+<section class="bg-[var(--color-travertine)] text-[var(--color-ink)] pb-24">
+  <div class="container-edge grid grid-cols-1 md:grid-cols-12 gap-10">
+    <div class="md:col-span-5">
+      <!-- Portrait placeholder -->
+      <div class="aspect-[4/5] w-full bg-[var(--color-ink)] relative overflow-hidden grain">
+        <svg viewBox="0 0 400 500" class="w-full h-full" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <rect width="400" height="500" fill="#0e0e0c" />
+          <!-- abstract face silhouette -->
+          <g stroke="#f4efe6" stroke-width="0.8" opacity="0.4">
+            <circle cx="200" cy="220" r="100" />
+            <ellipse cx="200" cy="220" rx="100" ry="120" />
+            <ellipse cx="200" cy="220" rx="60" ry="90" />
+          </g>
+          <g fill="#c6b79a" opacity="0.5">
+            <circle cx="200" cy="220" r="3" />
+            <circle cx="170" cy="250" r="1.5" />
+            <circle cx="230" cy="190" r="1.5" />
+          </g>
+          <text x="50%" y="92%" text-anchor="middle" fill="#f4efe6" opacity="0.4" font-family="Inter Variable, sans-serif" font-size="11" letter-spacing="2">PORTRAIT PLACEHOLDER</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="md:col-span-7 space-y-6 text-base sm:text-lg leading-relaxed max-w-[60ch]">
+      {dict.about.bioParas.map((p) => (<p class="opacity-90">{p}</p>))}
+    </div>
+  </div>
+</section>
+
+<section class="bg-[var(--color-travertine)] text-[var(--color-ink)] py-24 border-t border-[color-mix(in_oklab,var(--color-ink)_15%,transparent)]">
+  <div class="container-edge grid grid-cols-1 md:grid-cols-12 gap-10">
+    <div class="md:col-span-3">
+      <p class="text-eyebrow opacity-60">{dict.about.timelineHeading}</p>
+    </div>
+    <ol class="md:col-span-9 space-y-10">
+      {dict.about.timeline.map((step) => (
+        <li class="grid grid-cols-12 gap-4 sm:gap-8 items-baseline border-t border-[color-mix(in_oklab,var(--color-ink)_15%,transparent)] pt-6 reveal-trigger">
+          <span class="col-span-4 sm:col-span-3 text-eyebrow opacity-60">{step.year}</span>
+          <div class="col-span-8 sm:col-span-9">
+            <p class="text-display text-[clamp(1.4rem,2.6vw,2rem)] leading-tight reveal-mask">
+              <span class="reveal-line block">{step.title}</span>
+            </p>
+            <p class="mt-1 opacity-75">{step.place}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<section class="bg-[var(--color-travertine)] text-[var(--color-ink)] py-24 border-t border-[color-mix(in_oklab,var(--color-ink)_15%,transparent)]">
+  <div class="container-edge grid grid-cols-1 md:grid-cols-12 gap-10">
+    <div class="md:col-span-6">
+      <p class="text-eyebrow opacity-60 mb-6">{dict.about.toolsHeading}</p>
+      <ul class="flex flex-wrap gap-x-6 gap-y-3 text-display text-[clamp(1.4rem,2.4vw,1.8rem)]">
+        {dict.about.tools.map((tool) => (<li>{tool}</li>))}
+      </ul>
+    </div>
+    <div class="md:col-span-6">
+      <p class="text-eyebrow opacity-60 mb-6">{dict.about.offClockHeading}</p>
+      <ul class="flex flex-wrap gap-x-6 gap-y-3 text-display text-[clamp(1.4rem,2.4vw,1.8rem)]">
+        {dict.about.offClock.map((item) => (<li>{item}</li>))}
+      </ul>
+    </div>
+  </div>
+</section>

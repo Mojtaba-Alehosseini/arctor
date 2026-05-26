@@ -1,0 +1,79 @@
+---
+import { t, type Locale } from "../i18n/config";
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const dict = t(locale);
+const email = "shirin.arctor@gmail.com"; // placeholder — swap for her preferred address
+---
+
+<section class="pt-36 sm:pt-44 pb-16 bg-[var(--color-travertine)] text-[var(--color-ink)]">
+  <div class="container-edge">
+    <p class="text-eyebrow opacity-60 mb-6">{dict.contact.eyebrow}</p>
+    <h1 class="text-display text-[clamp(2.4rem,7vw,6rem)] leading-[1.02] max-w-[16ch]">{dict.contact.title}</h1>
+    <p class="mt-8 max-w-[58ch] text-lg opacity-85">{dict.contact.body}</p>
+  </div>
+</section>
+
+<section class="bg-[var(--color-travertine)] text-[var(--color-ink)] pb-32">
+  <div class="container-edge grid grid-cols-1 md:grid-cols-12 gap-12">
+    <div class="md:col-span-6 space-y-8">
+      <div>
+        <p class="text-eyebrow opacity-60 mb-2">{dict.contact.emailLabel}</p>
+        <a href={`mailto:${email}`} class="text-display text-[clamp(1.4rem,3vw,2.2rem)] link-underline">{email}</a>
+      </div>
+      <div>
+        <p class="text-eyebrow opacity-60 mb-2">{dict.contact.telegramLabel}</p>
+        <a href="https://t.me/shirin_arctor" target="_blank" rel="noopener" class="text-display text-[clamp(1.4rem,3vw,2.2rem)] link-underline">@shirin_arctor</a>
+      </div>
+      <div>
+        <p class="text-eyebrow opacity-60 mb-2">{dict.contact.linkedinLabel}</p>
+        <a href="https://www.linkedin.com/in/shirin-keshmirinejad-arctor-407653152/" target="_blank" rel="noopener" class="text-display text-[clamp(1.4rem,3vw,2.2rem)] link-underline">Shirin Keshmirinejad</a>
+      </div>
+      <div>
+        <p class="text-eyebrow opacity-60 mb-2">{dict.contact.locationLabel}</p>
+        <p class="text-base">{dict.contact.locationValue}</p>
+      </div>
+    </div>
+
+    <div class="md:col-span-6">
+      <form id="contact-form" data-email={email} class="space-y-6">
+        <label class="block">
+          <span class="text-eyebrow opacity-60">{dict.contact.formNameLabel}</span>
+          <input required name="name" type="text" class="mt-2 w-full bg-transparent border-b border-[var(--color-ink)] py-3 outline-none focus:border-[var(--color-saffron)] transition-colors" />
+        </label>
+        <label class="block">
+          <span class="text-eyebrow opacity-60">{dict.contact.formEmailLabel}</span>
+          <input required name="email" type="email" class="mt-2 w-full bg-transparent border-b border-[var(--color-ink)] py-3 outline-none focus:border-[var(--color-saffron)] transition-colors" />
+        </label>
+        <label class="block">
+          <span class="text-eyebrow opacity-60">{dict.contact.formMessageLabel}</span>
+          <textarea required name="message" rows="5" class="mt-2 w-full bg-transparent border-b border-[var(--color-ink)] py-3 outline-none focus:border-[var(--color-saffron)] transition-colors resize-none"></textarea>
+        </label>
+        <div class="flex items-center justify-between">
+          <button type="submit" class="inline-flex items-center gap-3 text-eyebrow border border-[var(--color-ink)] rounded-full px-6 py-3 hover:bg-[var(--color-ink)] hover:text-[var(--color-travertine)] transition-colors">
+            <span>{dict.contact.formSend}</span><span aria-hidden="true">→</span>
+          </button>
+          <p class="text-xs opacity-60">{dict.contact.formNote}</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (function () {
+    const form = document.getElementById("contact-form");
+    if (!form) return;
+    const to = form.getAttribute("data-email") || "";
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const data = new FormData(form);
+      const name = String(data.get("name") || "");
+      const email = String(data.get("email") || "");
+      const message = String(data.get("message") || "");
+      const subject = encodeURIComponent("Project enquiry from " + name);
+      const body = encodeURIComponent(message + "\n\n— " + name + "\n" + email);
+      window.location.href = "mailto:" + to + "?subject=" + subject + "&body=" + body;
+    });
+  })();
+</script>

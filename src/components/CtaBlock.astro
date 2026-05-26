@@ -1,0 +1,21 @@
+---
+import { t, type Locale, localePath } from "../i18n/config";
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const dict = t(locale);
+---
+
+<section class="bg-[var(--color-saffron)] text-[var(--color-travertine)] py-28 sm:py-40">
+  <div class="container-edge grid grid-cols-1 md:grid-cols-12 gap-10 items-end">
+    <div class="md:col-span-8">
+      <p class="text-eyebrow opacity-80 mb-6">{dict.cta.eyebrow}</p>
+      <h2 class="text-display text-[clamp(2rem,6vw,5rem)] leading-[1.02] max-w-[22ch]">{dict.cta.title}</h2>
+      <p class="mt-6 max-w-[52ch] opacity-90">{dict.cta.subtitle}</p>
+    </div>
+    <div class="md:col-span-4 md:text-end">
+      <a href={localePath(locale, "contact")} class="inline-flex items-center gap-3 text-eyebrow border border-[var(--color-travertine)] rounded-full px-6 py-3 hover:bg-[var(--color-travertine)] hover:text-[var(--color-saffron)] transition-colors">
+        <span>{dict.cta.button}</span><span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</section>

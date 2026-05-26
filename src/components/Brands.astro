@@ -1,0 +1,29 @@
+---
+import { t, type Locale } from "../i18n/config";
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const dict = t(locale);
+---
+
+<section class="bg-[var(--color-travertine)] text-[var(--color-ink)] py-24 sm:py-32 border-t border-[color-mix(in_oklab,var(--color-ink)_15%,transparent)]">
+  <div class="container-edge">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
+      <div class="md:col-span-4">
+        <p class="text-eyebrow opacity-60 mb-4">{dict.brands.eyebrow} — 06 / 06</p>
+        <h2 class="text-display text-[clamp(1.6rem,3.6vw,2.6rem)] leading-[1.05] max-w-[16ch]">{dict.brands.title}</h2>
+      </div>
+      <div class="md:col-span-8">
+        <ul class="divide-y divide-[color-mix(in_oklab,var(--color-ink)_15%,transparent)]">
+          {dict.brands.list.map((name, i) => (
+            <li class="flex items-baseline justify-between py-5 reveal-trigger">
+              <span class="text-display text-[clamp(1.8rem,4vw,3rem)] reveal-mask">
+                <span class="reveal-line block">{name}</span>
+              </span>
+              <span class="text-eyebrow opacity-50">0{i + 1}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

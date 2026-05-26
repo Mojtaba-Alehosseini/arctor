@@ -1,0 +1,114 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { t, isRtl, type Locale, DEFAULT_LOCALE } from "../i18n/config";
+
+export interface Props {
+  locale?: Locale;
+  title?: string;
+  description?: string;
+  pathname?: string; // path within the locale (e.g. "/work")
+}
+
+const { locale = DEFAULT_LOCALE, title, description, pathname = "/" } = Astro.props;
+const dict = t(locale);
+const pageTitle = title ?? dict.meta.title;
+const pageDesc = description ?? dict.meta.description;
+const dir = isRtl(locale) ? "rtl" : "ltr";
+---
+
+<!doctype html>
+<html lang={locale} dir={dir}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDesc} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDesc} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" hreflang="en" href={Astro.url.origin + pathname} />
+    <link rel="alternate" hreflang="it" href={Astro.url.origin + "/it" + pathname} />
+    <link rel="alternate" hreflang="de" href={Astro.url.origin + "/de" + pathname} />
+    <link rel="alternate" hreflang="fr" href={Astro.url.origin + "/fr" + pathname} />
+    <link rel="alternate" hreflang="fa" href={Astro.url.origin + "/fa" + pathname} />
+    <link rel="alternate" hreflang="x-default" href={Astro.url.origin + pathname} />
+  </head>
+  <body class="min-h-screen antialiased">
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-[var(--color-ink)] focus:text-[var(--color-travertine)] focus:px-3 focus:py-2 focus:rounded">{dict.nav.skipToContent}</a>
+    <Header locale={locale} pathname={pathname} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+
+    <!-- Reveal on view -->
+    <script is:inline>
+      (function () {
+        if (typeof window === "undefined") return;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          document.querySelectorAll(".reveal-trigger").forEach((el) => el.classList.add("in-view"));
+          return;
+        }
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                e.target.classList.add("in-view");
+                io.unobserve(e.target);
+              }
+            });
+          },
+          { rootMargin: "0px 0px -10% 0px", threshold: 0.05 }
+        );
+        document.querySelectorAll(".reveal-trigger").forEach((el) => io.observe(el));
+      })();
+    </script>
+
+    <!-- Custom cursor (desktop only) -->
+    <script is:inline>
+      (function () {
+        if (typeof window === "undefined") return;
+        if (window.matchMedia("(pointer: coarse)").matches) return;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        const ring = document.createElement("div");
+        ring.setAttribute("aria-hidden", "true");
+        ring.style.cssText =
+          "position:fixed;top:0;left:0;width:28px;height:28px;border:1px solid var(--color-ink);border-radius:50%;pointer-events:none;z-index:9999;transform:translate3d(-100px,-100px,0);transition:transform .15s ease,opacity .2s ease,width .25s ease,height .25s ease,border-color .25s ease;mix-blend-mode:difference;will-change:transform;opacity:.65";
+        document.body.appendChild(ring);
+        let x = -100,
+          y = -100,
+          tx = -100,
+          ty = -100;
+        addEventListener("mousemove", (e) => {
+          x = e.clientX;
+          y = e.clientY;
+        });
+        function tick() {
+          tx += (x - tx) * 0.22;
+          ty += (y - ty) * 0.22;
+          ring.style.transform = `translate3d(${tx - 14}px, ${ty - 14}px, 0)`;
+          requestAnimationFrame(tick);
+        }
+        tick();
+        // Grow on links
+        function bind() {
+          document.querySelectorAll("a, button, [data-cursor=large]").forEach((el) => {
+            el.addEventListener("mouseenter", () => {
+              ring.style.width = "60px";
+              ring.style.height = "60px";
+            });
+            el.addEventListener("mouseleave", () => {
+              ring.style.width = "28px";
+              ring.style.height = "28px";
+            });
+          });
+        }
+        bind();
+      })();
+    </script>
+  </body>
+</html>

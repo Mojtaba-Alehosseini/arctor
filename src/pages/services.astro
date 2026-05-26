@@ -1,0 +1,8 @@
+---
+import Base from "../layouts/Base.astro";
+import ServicesContent from "../components/ServicesContent.astro";
+const locale = "en" as const;
+---
+<Base locale={locale} pathname="/services">
+  <ServicesContent locale={locale} />
+</Base>

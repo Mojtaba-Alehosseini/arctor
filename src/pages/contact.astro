@@ -1,0 +1,8 @@
+---
+import Base from "../layouts/Base.astro";
+import ContactContent from "../components/ContactContent.astro";
+const locale = "en" as const;
+---
+<Base locale={locale} pathname="/contact">
+  <ContactContent locale={locale} />
+</Base>

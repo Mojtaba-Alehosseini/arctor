@@ -1,0 +1,30 @@
+---
+import Base from "../../../layouts/Base.astro";
+import ProjectCard from "../../../components/ProjectCard.astro";
+import { projects } from "../../../data/projects";
+import { LOCALES, DEFAULT_LOCALE, t, type Locale } from "../../../i18n/config";
+
+export async function getStaticPaths() {
+  return LOCALES.filter((l) => l !== DEFAULT_LOCALE).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Locale };
+const dict = t(lang);
+---
+
+<Base locale={lang} pathname="/work">
+  <section class="pt-36 sm:pt-44 pb-16 bg-[var(--color-travertine)] text-[var(--color-ink)]">
+    <div class="container-edge">
+      <p class="text-eyebrow opacity-60 mb-6">{dict.work.eyebrow}</p>
+      <h1 class="text-display text-[clamp(2.4rem,6vw,5rem)] leading-[1.02] max-w-[24ch]">{dict.work.title}</h1>
+    </div>
+  </section>
+
+  <section class="bg-[var(--color-travertine)] text-[var(--color-ink)] pb-32">
+    <div class="container-edge">
+      {projects.map((p, i) => (
+        <ProjectCard project={p} locale={lang} index={i + 1} />
+      ))}
+    </div>
+  </section>
+</Base>

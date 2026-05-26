@@ -1,0 +1,167 @@
+@import "tailwindcss";
+@import "@fontsource-variable/fraunces";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/vazirmatn";
+
+@theme {
+  /* Brand palette — Quiet Editorial */
+  --color-ink: #0e0e0c;       /* Inkstone */
+  --color-travertine: #f4efe6; /* Warm off-white */
+  --color-limestone: #c6b79a;  /* Sand neutral */
+  --color-saffron: #b8451f;    /* Persian saffron-brick */
+  --color-cypress: #3d4f3d;    /* Mediterranean green */
+  --color-mist: #d8d4ca;       /* Soft sand */
+  --color-graphite: #2a2a26;   /* Slightly lighter than ink */
+
+  /* Typography */
+  --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-fa: "Vazirmatn Variable", "Inter Variable", sans-serif;
+
+  /* Easing & timing */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@layer base {
+  :root {
+    --bg: var(--color-travertine);
+    --fg: var(--color-ink);
+    --muted: color-mix(in oklab, var(--color-ink) 60%, var(--color-travertine));
+    --border: color-mix(in oklab, var(--color-ink) 15%, var(--color-travertine));
+    color-scheme: light;
+  }
+
+  html {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  html[lang="fa"] {
+    font-family: var(--font-fa);
+    direction: rtl;
+  }
+
+  html[lang="fa"] body { letter-spacing: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    margin: 0;
+    min-height: 100dvh;
+  }
+
+  ::selection { background: var(--color-ink); color: var(--color-travertine); }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  html[lang="fa"] h1, html[lang="fa"] h2, html[lang="fa"] h3, html[lang="fa"] h4 {
+    font-family: var(--font-fa);
+    letter-spacing: 0;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    transition: color .25s var(--ease-out-quart), opacity .25s var(--ease-out-quart);
+  }
+
+  button { font: inherit; cursor: pointer; }
+
+  img, svg, video { display: block; max-width: 100%; }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  .container-edge { padding-inline: clamp(1.25rem, 4vw, 3.5rem); }
+
+  /* Display text utility */
+  .text-display {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    line-height: 1.02;
+  }
+
+  .text-eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.72rem;
+    font-weight: 500;
+  }
+  html[lang="fa"] .text-eyebrow { letter-spacing: 0.06em; }
+
+  /* Subtle grain overlay for hero */
+  .grain {
+    position: relative;
+  }
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='0.6'/></svg>");
+  }
+
+  .reveal-mask {
+    overflow: hidden;
+  }
+  .reveal-line {
+    display: block;
+    transform: translateY(102%);
+    transition: transform 0.9s var(--ease-out-expo);
+  }
+  .reveal-trigger.in-view .reveal-line {
+    transform: translateY(0);
+  }
+
+  .marquee {
+    display: flex;
+    overflow: hidden;
+    user-select: none;
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+  .marquee__inner {
+    display: flex;
+    flex-shrink: 0;
+    gap: 3rem;
+    padding-inline: 1.5rem;
+    animation: marquee 38s linear infinite;
+  }
+  html[lang="fa"] .marquee__inner { animation-direction: reverse; }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); }
+  }
+
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.5s var(--ease-out-expo);
+  }
+  .link-underline:hover { background-size: 100% 1px; }
+  html[lang="fa"] .link-underline { background-position: 100% 100%; }
+
+  .border-faint { border-color: color-mix(in oklab, var(--color-ink) 15%, transparent); }
+}

@@ -1,0 +1,55 @@
+---
+import { t, type Locale, localePath } from "../i18n/config";
+import Mark from "./Mark.astro";
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const dict = t(locale);
+---
+
+<footer class="bg-[var(--color-ink)] text-[var(--color-travertine)] mt-32">
+  <div class="container-edge py-20">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
+      <div class="md:col-span-5">
+        <a href={localePath(locale, "/")} class="inline-flex items-center gap-2 text-eyebrow tracking-[0.18em]">
+          <Mark class="w-5 h-5 text-current" />
+          <span>Arctor</span>
+        </a>
+        <p class="mt-6 text-display text-4xl sm:text-5xl max-w-md leading-[1.05]">
+          {dict.cta.title}
+        </p>
+        <a
+          href={localePath(locale, "contact")}
+          class="mt-8 inline-flex items-center gap-3 text-eyebrow link-underline"
+        >
+          <span>{dict.cta.button}</span>
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+
+      <div class="md:col-span-3">
+        <p class="text-eyebrow opacity-60 mb-4">{dict.nav.about}</p>
+        <ul class="space-y-2 text-sm">
+          <li><a href={localePath(locale, "work")} class="link-underline">{dict.nav.work}</a></li>
+          <li><a href={localePath(locale, "about")} class="link-underline">{dict.nav.about}</a></li>
+          <li><a href={localePath(locale, "services")} class="link-underline">{dict.nav.services}</a></li>
+          <li><a href={localePath(locale, "contact")} class="link-underline">{dict.nav.contact}</a></li>
+        </ul>
+      </div>
+
+      <div class="md:col-span-4">
+        <p class="text-eyebrow opacity-60 mb-4">{dict.contact.eyebrow}</p>
+        <ul class="space-y-2 text-sm">
+          <li><a href="https://t.me/shirin_arctor" target="_blank" rel="noopener" class="link-underline">Telegram · @shirin_arctor</a></li>
+          <li><a href="https://www.linkedin.com/in/shirin-keshmirinejad-arctor-407653152/" target="_blank" rel="noopener" class="link-underline">LinkedIn</a></li>
+          <li><a href="https://www.instagram.com/shirin_arctor/" target="_blank" rel="noopener" class="link-underline">Instagram</a></li>
+        </ul>
+        <p class="mt-8 text-xs opacity-50">{dict.footer.location}</p>
+      </div>
+    </div>
+
+    <div class="mt-20 pt-8 border-t border-[color-mix(in_oklab,var(--color-travertine)_15%,transparent)] flex flex-col sm:flex-row justify-between items-start gap-4">
+      <p class="text-xs opacity-50">{dict.footer.rights}</p>
+      <a href="#main" class="text-eyebrow link-underline">{dict.footer.backToTop} ↑</a>
+    </div>
+  </div>
+</footer>

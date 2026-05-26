@@ -1,0 +1,44 @@
+---
+import { t, type Locale } from "../i18n/config";
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const dict = t(locale);
+---
+
+<section class="pt-36 sm:pt-44 pb-16 bg-[var(--color-travertine)] text-[var(--color-ink)]">
+  <div class="container-edge">
+    <p class="text-eyebrow opacity-60 mb-6">{dict.services.eyebrow}</p>
+    <h1 class="text-display text-[clamp(2.4rem,5.6vw,4.8rem)] leading-[1.04] max-w-[22ch]">{dict.services.title}</h1>
+  </div>
+</section>
+
+<section class="bg-[var(--color-travertine)] text-[var(--color-ink)] pb-24">
+  <div class="container-edge">
+    <ul class="divide-y divide-[color-mix(in_oklab,var(--color-ink)_18%,transparent)]">
+      {dict.services.items.map((item) => (
+        <li class="grid grid-cols-12 gap-6 sm:gap-10 py-12 items-start reveal-trigger">
+          <span class="col-span-2 sm:col-span-1 text-eyebrow opacity-60">{item.n}</span>
+          <h2 class="col-span-10 sm:col-span-4 text-display text-[clamp(1.6rem,3.2vw,2.6rem)] leading-tight reveal-mask">
+            <span class="reveal-line block">{item.name}</span>
+          </h2>
+          <p class="col-span-12 sm:col-span-7 text-base sm:text-lg opacity-85 leading-relaxed max-w-[60ch]">{item.body}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<section class="bg-[var(--color-ink)] text-[var(--color-travertine)] py-24 sm:py-32">
+  <div class="container-edge">
+    <p class="text-eyebrow opacity-60 mb-10">{dict.services.processHeading}</p>
+    <ol class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10">
+      {dict.services.process.map((step) => (
+        <li class="reveal-trigger">
+          <p class="text-eyebrow opacity-60">{step.n}</p>
+          <p class="text-display text-2xl mt-2 reveal-mask"><span class="reveal-line block">{step.name}</span></p>
+          <p class="mt-2 text-sm opacity-75">{step.body}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

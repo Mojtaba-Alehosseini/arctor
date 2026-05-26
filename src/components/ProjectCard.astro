@@ -1,0 +1,29 @@
+---
+import type { Project } from "../data/projects";
+import { t, type Locale, localePath, DEFAULT_LOCALE } from "../i18n/config";
+
+interface Props { project: Project; locale: Locale; index: number }
+const { project, locale, index } = Astro.props;
+const d = t(locale);
+const proj = project.i18n[locale] ?? project.i18n[DEFAULT_LOCALE];
+const idx = String(index).padStart(2, "0");
+---
+
+<a href={localePath(locale, `work/${project.slug}`)} class="group block reveal-trigger" data-cursor="large">
+  <article class="grid grid-cols-12 gap-6 sm:gap-10 items-start py-10 sm:py-14 border-t border-[color-mix(in_oklab,var(--color-ink)_18%,transparent)]">
+    <div class="col-span-2 sm:col-span-1 text-eyebrow opacity-60">{idx}</div>
+    <div class="col-span-10 sm:col-span-3">
+      <p class="text-eyebrow opacity-60">{project.category} · {project.yearShort}</p>
+      <p class="mt-2 text-eyebrow opacity-60">{project.location}</p>
+    </div>
+    <div class="col-span-12 sm:col-span-6">
+      <h3 class="text-display text-[clamp(1.6rem,3.6vw,3rem)] leading-[1.05] transition-transform duration-700 ease-out group-hover:translate-x-2 reveal-mask">
+        <span class="reveal-line">{proj.title}</span>
+      </h3>
+      <p class="mt-3 opacity-75 max-w-[44ch]">{proj.subtitle}</p>
+    </div>
+    <div class="col-span-12 sm:col-span-2 sm:text-end">
+      <span class="text-eyebrow link-underline">{d.work.nextProject.split(" ")[0]} →</span>
+    </div>
+  </article>
+</a>
