@@ -32,7 +32,7 @@ const navItems = [
       <div class="flex items-center gap-3 ms-4 ps-4 border-s border-[color-mix(in_oklab,var(--color-travertine)_25%,transparent)]">
         {LOCALES.map((l) => (
           <a
-            href={localePath(l, pathname.replace(/^\/(en|it|de|fr|fa)\/?/, '/'))}
+            href={localePath(l, pathname)}
             class={`text-[10px] tracking-[0.18em] uppercase transition-opacity hover:opacity-100 ${l === locale ? 'opacity-100' : 'opacity-50'}`}
             aria-current={l === locale ? 'page' : undefined}
           >
@@ -72,7 +72,7 @@ const navItems = [
       <div class="flex flex-wrap gap-4 text-eyebrow tracking-[0.18em] opacity-75">
         {LOCALES.map((l) => (
           <a
-            href={localePath(l, pathname.replace(/^\/(en|it|de|fr|fa)\/?/, '/'))}
+            href={localePath(l, pathname)}
             class={`${l === locale ? 'opacity-100' : 'opacity-50'} hover:opacity-100 transition-opacity`}
           >
             {LOCALE_SHORT[l]}

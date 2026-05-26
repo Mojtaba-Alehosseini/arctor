@@ -2,7 +2,7 @@
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import { t, isRtl, type Locale, DEFAULT_LOCALE } from "../i18n/config";
+import { t, isRtl, withBase, localePath, type Locale, DEFAULT_LOCALE } from "../i18n/config";
 
 export interface Props {
   locale?: Locale;
@@ -29,13 +29,13 @@ const dir = isRtl(locale) ? "rtl" : "ltr";
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDesc} />
     <meta property="og:type" content="website" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="alternate" hreflang="en" href={Astro.url.origin + pathname} />
-    <link rel="alternate" hreflang="it" href={Astro.url.origin + "/it" + pathname} />
-    <link rel="alternate" hreflang="de" href={Astro.url.origin + "/de" + pathname} />
-    <link rel="alternate" hreflang="fr" href={Astro.url.origin + "/fr" + pathname} />
-    <link rel="alternate" hreflang="fa" href={Astro.url.origin + "/fa" + pathname} />
-    <link rel="alternate" hreflang="x-default" href={Astro.url.origin + pathname} />
+    <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
+    <link rel="alternate" hreflang="en" href={Astro.url.origin + localePath("en", pathname)} />
+    <link rel="alternate" hreflang="it" href={Astro.url.origin + localePath("it", pathname)} />
+    <link rel="alternate" hreflang="de" href={Astro.url.origin + localePath("de", pathname)} />
+    <link rel="alternate" hreflang="fr" href={Astro.url.origin + localePath("fr", pathname)} />
+    <link rel="alternate" hreflang="fa" href={Astro.url.origin + localePath("fa", pathname)} />
+    <link rel="alternate" hreflang="x-default" href={Astro.url.origin + localePath("en", pathname)} />
   </head>
   <body class="min-h-screen antialiased">
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-[var(--color-ink)] focus:text-[var(--color-travertine)] focus:px-3 focus:py-2 focus:rounded">{dict.nav.skipToContent}</a>
