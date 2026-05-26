@@ -10,7 +10,7 @@ const dict = t(locale);
     <p class="text-eyebrow opacity-60 mb-12">{dict.manifesto.eyebrow} — 02 / 06</p>
     <div class="reveal-trigger">
       {dict.manifesto.lines.map((line, i) => (
-        <span class="reveal-mask block" style={`transition-delay: ${i * 80}ms`}>
+        <span class="reveal-mask block" style={`--reveal-delay: ${i * 100}ms`}>
           <span class="reveal-line text-display text-[clamp(1.6rem,4vw,3.5rem)] leading-[1.18] block">
             {line}
           </span>

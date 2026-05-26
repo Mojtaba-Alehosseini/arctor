@@ -7,29 +7,31 @@ const { locale } = Astro.props;
 const dict = t(locale);
 ---
 
-<section class="relative h-[100svh] min-h-[640px] w-full grain overflow-hidden bg-[var(--color-ink)] text-[var(--color-travertine)]">
+<section class="relative min-h-[100svh] w-full grain overflow-hidden bg-[var(--color-ink)] text-[var(--color-travertine)]">
   <HeroCanvas client:load />
 
-  <div class="absolute inset-0 container-edge flex flex-col justify-between py-24 sm:py-28">
-    <div class="flex items-start justify-between text-eyebrow opacity-70">
+  <div class="relative container-edge pt-28 sm:pt-32 pb-12 min-h-[100svh] flex flex-col">
+    <!-- top eyebrow -->
+    <div class="flex items-start justify-between text-eyebrow opacity-70 mb-12 sm:mb-20">
       <p>{dict.hero.eyebrow}</p>
       <p class="hidden sm:block">{dict.hero.counterLabel} · 01 / 06</p>
     </div>
 
-    <div class="relative max-w-[18ch] sm:max-w-[26ch] reveal-trigger">
-      <h1 class="text-display text-[clamp(2.5rem,7vw,6.5rem)] leading-[1.02]">
-        {dict.hero.headlineLines.map((line) => (
-          <span class="reveal-mask block">
+    <!-- headline -->
+    <div class="reveal-trigger">
+      <h1 class="text-display text-[clamp(1.75rem,5vw,4.5rem)] leading-[1.06] tracking-tight">
+        {dict.hero.headlineLines.map((line, i) => (
+          <span class="reveal-mask block" style={`--reveal-delay: ${i * 90}ms`}>
             <span class="reveal-line">{line}</span>
           </span>
         ))}
       </h1>
 
-      <p class="mt-8 max-w-[44ch] text-base sm:text-lg opacity-80 leading-relaxed">
+      <p class="mt-6 sm:mt-8 max-w-[44ch] text-sm sm:text-base opacity-80 leading-relaxed">
         {dict.hero.intro}
       </p>
 
-      <div class="mt-10 flex flex-wrap items-center gap-6">
+      <div class="mt-6 sm:mt-8 flex flex-wrap items-center gap-6">
         <a
           href={localePath(locale, "work")}
           class="group inline-flex items-center gap-3 text-eyebrow link-underline"
@@ -46,7 +48,8 @@ const dict = t(locale);
       </div>
     </div>
 
-    <div class="flex items-end justify-between text-eyebrow opacity-60">
+    <!-- bottom row -->
+    <div class="mt-auto pt-12 flex items-end justify-between text-eyebrow opacity-60">
       <p>{dict.hero.scrollHint} ↓</p>
       <p class="hidden sm:block">N. 1 / 6 — Genoa · 44°24′N · 8°56′E</p>
     </div>

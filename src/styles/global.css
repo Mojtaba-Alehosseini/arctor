@@ -123,14 +123,21 @@
   }
 
   .reveal-mask {
-    overflow: hidden;
+    display: block;
+    --reveal-delay: 0ms;
   }
   .reveal-line {
     display: block;
-    transform: translateY(102%);
-    transition: transform 0.9s var(--ease-out-expo);
+    opacity: 0;
+    transform: translateY(28px);
+    transition-property: opacity, transform;
+    transition-duration: 0.9s, 0.9s;
+    transition-timing-function: var(--ease-out-expo), var(--ease-out-expo);
+    transition-delay: var(--reveal-delay), var(--reveal-delay);
+    will-change: opacity, transform;
   }
   .reveal-trigger.in-view .reveal-line {
+    opacity: 1;
     transform: translateY(0);
   }
 
