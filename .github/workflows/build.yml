@@ -14,11 +14,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: "npm"
-      - run: npm ci || npm install
-      - run: npm run build
+      - name: Install
+        run: npm install --no-audit --no-fund
+      - name: Build
+        run: npm run build
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: site-dist
           path: dist/
+          retention-days: 7
