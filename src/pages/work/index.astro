@@ -9,14 +9,15 @@ const dict = t(locale);
 ---
 
 <Base locale={locale} pathname="/work">
-  <section class="pt-36 sm:pt-44 pb-16 bg-[var(--color-travertine)] text-[var(--color-ink)]">
+  <section class="pt-36 sm:pt-44 pb-12 bg-[var(--color-travertine)] text-[var(--color-ink)]">
     <div class="container-edge">
       <p class="text-eyebrow opacity-60 mb-6">{dict.work.eyebrow}</p>
-      <h1 class="text-display text-[clamp(2.4rem,6vw,5rem)] leading-[1.02] max-w-[24ch]">{dict.work.title}</h1>
+      <h1 class="text-display text-[clamp(2.4rem,6vw,5rem)] leading-[1.02] max-w-[26ch]">{dict.work.title}</h1>
+      <p class="mt-6 max-w-[60ch] text-base sm:text-lg opacity-80">A small but considered body of work — research, architecture, interior, and showroom — spanning Iran and Italy.</p>
     </div>
   </section>
 
-  <section class="bg-[var(--color-travertine)] text-[var(--color-ink)] pb-32">
+  <section class="bg-[var(--color-travertine)] text-[var(--color-ink)] pb-32 pt-4">
     <div class="container-edge">
       {projects.map((p, i) => (
         <ProjectCard project={p} locale={locale} index={i + 1} />

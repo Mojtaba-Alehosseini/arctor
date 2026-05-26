@@ -6,6 +6,10 @@ export interface Project {
   location: string;
   role: string;
   tools: string[];
+  /** Hero cover — full-bleed image */
+  cover: string;
+  /** Optional second supporting image inside the case study */
+  detail?: string;
   featured?: boolean;
   /** Translations are keyed by locale. Falls back to en if missing. */
   i18n: Record<
@@ -28,6 +32,8 @@ export const projects: Project[] = [
     location: "United Arab Emirates / Genova",
     role: "Master's thesis, architectural design",
     tools: ["Rhino", "Revit", "V-Ray", "CFD analysis", "Hand drawing"],
+    cover: "https://images.unsplash.com/photo-1715688532112-9f27cf022c81?w=2000&q=82&auto=format&fit=crop",
+    detail: "https://images.unsplash.com/photo-1603800372963-4510ab0185a9?w=1600&q=80&auto=format&fit=crop",
     featured: true,
     i18n: {
       en: {
@@ -95,6 +101,8 @@ export const projects: Project[] = [
     location: "Kermanshah, Iran",
     role: "Architectural designer",
     tools: ["Revit", "V-Ray", "AutoCAD"],
+    cover: "https://images.unsplash.com/photo-1621511075938-f03482369feb?w=2000&q=82&auto=format&fit=crop",
+    detail: "https://images.unsplash.com/photo-1635702422154-2b8fc4fac930?w=1600&q=80&auto=format&fit=crop",
     featured: true,
     i18n: {
       en: {
@@ -162,6 +170,8 @@ export const projects: Project[] = [
     location: "Tehran, Iran",
     role: "Interior designer & showroom manager",
     tools: ["AutoCAD", "SketchUp", "V-Ray", "InDesign"],
+    cover: "https://images.unsplash.com/photo-1690489965043-ec15758cce71?w=2000&q=82&auto=format&fit=crop",
+    detail: "https://images.unsplash.com/photo-1591931681345-16b532514cde?w=1600&q=80&auto=format&fit=crop",
     featured: true,
     i18n: {
       en: {
@@ -229,6 +239,8 @@ export const projects: Project[] = [
     location: "Tehran, Iran",
     role: "Architect & CEO assistant",
     tools: ["Revit", "AutoCAD", "V-Ray"],
+    cover: "https://images.unsplash.com/photo-1706689656095-168768dc20a5?w=2000&q=82&auto=format&fit=crop",
+    detail: "https://images.unsplash.com/photo-1449247709967-d4461a6a6103?w=1600&q=80&auto=format&fit=crop",
     i18n: {
       en: {
         title: "HAMKO group — interiors",
@@ -295,6 +307,8 @@ export const projects: Project[] = [
     location: "Tehran, Iran",
     role: "Junior designer",
     tools: ["AutoCAD", "SketchUp"],
+    cover: "https://images.unsplash.com/photo-1559681125-bb99bd424b63?w=2000&q=82&auto=format&fit=crop",
+    detail: "https://images.unsplash.com/photo-1642522366375-cf22eaba6b58?w=1600&q=80&auto=format&fit=crop",
     i18n: {
       en: {
         title: "Green roofs — Chekadbam",

@@ -1,47 +1,62 @@
 ---
 import { t, type Locale, localePath } from "../i18n/config";
-import HeroCanvas from "./HeroCanvas.tsx";
+import { HERO_IMAGE, HERO_IMAGE_ALT } from "../data/heroImage";
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const dict = t(locale);
 ---
 
-<section class="relative min-h-[100svh] w-full grain overflow-hidden bg-[var(--color-ink)] text-[var(--color-travertine)]">
-  <HeroCanvas client:load />
+<section class="relative min-h-[100svh] w-full overflow-hidden bg-[var(--color-ink)] text-[var(--color-travertine)]">
+  <!-- Full-bleed hero photograph -->
+  <div class="absolute inset-0">
+    <img
+      src={HERO_IMAGE}
+      alt={HERO_IMAGE_ALT}
+      class="absolute inset-0 w-full h-full object-cover opacity-70"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+    />
+    <!-- bottom-up vignette so text is readable -->
+    <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(14,14,12,0.55) 0%, rgba(14,14,12,0.25) 35%, rgba(14,14,12,0.55) 65%, rgba(14,14,12,0.92) 100%);"></div>
+    <!-- subtle grain -->
+    <div class="absolute inset-0 grain opacity-60 mix-blend-overlay"></div>
+  </div>
 
-  <div class="relative container-edge pt-28 sm:pt-32 pb-12 min-h-[100svh] flex flex-col">
-    <!-- top eyebrow -->
-    <div class="flex items-start justify-between text-eyebrow opacity-70 mb-12 sm:mb-20">
+  <!-- Content scaffold -->
+  <div class="relative container-edge pt-28 sm:pt-32 pb-10 min-h-[100svh] flex flex-col">
+    <!-- top eyebrow row -->
+    <div class="flex items-start justify-between text-eyebrow opacity-80 mb-16 sm:mb-24">
       <p>{dict.hero.eyebrow}</p>
       <p class="hidden sm:block">{dict.hero.counterLabel} · 01 / 06</p>
     </div>
 
-    <!-- headline -->
-    <div class="reveal-trigger">
-      <h1 class="text-display text-[clamp(1.75rem,5vw,4.5rem)] leading-[1.06] tracking-tight">
+    <!-- left-aligned headline + meta, anchored bottom-left -->
+    <div class="mt-auto reveal-trigger max-w-none">
+      <h1 class="text-display text-[clamp(1.75rem,4.6vw,4.25rem)] leading-[1.04] tracking-tight max-w-[24ch]">
         {dict.hero.headlineLines.map((line, i) => (
-          <span class="reveal-mask block" style={`--reveal-delay: ${i * 90}ms`}>
+          <span class="reveal-mask block" style={`--reveal-delay: ${i * 110}ms`}>
             <span class="reveal-line">{line}</span>
           </span>
         ))}
       </h1>
 
-      <p class="mt-6 sm:mt-8 max-w-[44ch] text-sm sm:text-base opacity-80 leading-relaxed">
+      <p class="mt-8 max-w-[52ch] text-base sm:text-lg opacity-90 leading-relaxed">
         {dict.hero.intro}
       </p>
 
-      <div class="mt-6 sm:mt-8 flex flex-wrap items-center gap-6">
+      <div class="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
         <a
           href={localePath(locale, "work")}
-          class="group inline-flex items-center gap-3 text-eyebrow link-underline"
+          class="inline-flex items-center gap-3 text-eyebrow link-underline"
         >
           <span>{dict.hero.cta}</span>
           <span aria-hidden="true">→</span>
         </a>
         <a
           href={localePath(locale, "contact")}
-          class="text-eyebrow opacity-60 hover:opacity-100 transition-opacity link-underline"
+          class="text-eyebrow opacity-70 hover:opacity-100 transition-opacity link-underline"
         >
           {dict.nav.contact}
         </a>
@@ -49,9 +64,9 @@ const dict = t(locale);
     </div>
 
     <!-- bottom row -->
-    <div class="mt-auto pt-12 flex items-end justify-between text-eyebrow opacity-60">
+    <div class="mt-10 sm:mt-14 pt-6 border-t border-[color-mix(in_oklab,var(--color-travertine)_18%,transparent)] flex items-end justify-between text-eyebrow opacity-70">
       <p>{dict.hero.scrollHint} ↓</p>
-      <p class="hidden sm:block">N. 1 / 6 — Genoa · 44°24′N · 8°56′E</p>
+      <p class="hidden sm:block">Genova · 44°24′N · 8°56′E</p>
     </div>
   </div>
 </section>
