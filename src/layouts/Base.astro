@@ -147,33 +147,56 @@ const jsonLd = {
         box.appendChild(im);
         document.body.appendChild(box);
 
+        var rows = Array.prototype.slice.call(list.querySelectorAll("[data-peek-src]"));
+        var cache = {};
+
+        // Warm the cache once the page is idle, so the first hover is instant.
+        function warm() {
+          rows.forEach(function (r) {
+            var s = r.getAttribute("data-peek-src");
+            if (cache[s]) return;
+            var i = new Image();
+            i.decoding = "async";
+            i.src = s;
+            cache[s] = i;
+          });
+        }
+        if ("requestIdleCallback" in window) requestIdleCallback(warm, { timeout: 2500 });
+        else setTimeout(warm, 1200);
+
         var tx = 0,
           ty = 0,
           x = 0,
           y = 0,
           vx = 0,
           vy = 0,
-          shown = false,
+          hovering = false,
           raf = 0;
 
         // Critically damped spring — no overshoot, interruptible at any moment.
         function tick() {
-          var k = 0.11,
-            damp = 0.74;
+          var k = 0.12,
+            damp = 0.72;
           vx = (vx + (tx - x) * k) * damp;
           vy = (vy + (ty - y) * k) * damp;
           x += vx;
           y += vy;
-          var skew = Math.max(-6, Math.min(6, vy * 0.16));
+          var tilt = Math.max(-1.4, Math.min(1.4, vy * 0.05));
           box.style.transform =
-            "translate3d(" + (x - box.offsetWidth / 2) + "px," + (y - box.offsetHeight / 2) + "px,0) rotate(" + skew * 0.35 + "deg)";
+            "translate3d(" + (x - box.offsetWidth / 2) + "px," + (y - box.offsetHeight / 2) + "px,0) rotate(" + tilt + "deg)";
           raf = requestAnimationFrame(tick);
+        }
+
+        function reveal(src) {
+          if (!hovering) return;
+          if (im.getAttribute("src") !== src) im.setAttribute("src", src);
+          box.style.opacity = "1";
         }
 
         list.addEventListener("pointermove", function (e) {
           tx = e.clientX;
           ty = e.clientY;
-          if (!shown) {
+          if (!raf) {
             x = tx;
             y = ty;
           }
@@ -185,19 +208,25 @@ const jsonLd = {
             var row = e.target.closest ? e.target.closest("[data-peek-src]") : null;
             if (!row) return;
             var src = row.getAttribute("data-peek-src");
-            if (im.getAttribute("src") !== src) im.setAttribute("src", src);
+            hovering = true;
             box.style.background = row.getAttribute("data-peek-bg") || "";
-            if (!shown) {
-              shown = true;
-              box.style.opacity = "1";
-              if (!raf) raf = requestAnimationFrame(tick);
+            if (!raf) raf = requestAnimationFrame(tick);
+
+            var pre = cache[src];
+            if (!pre) {
+              pre = new Image();
+              pre.decoding = "async";
+              pre.src = src;
+              cache[src] = pre;
             }
+            if (pre.complete && pre.naturalWidth) reveal(src);
+            else pre.addEventListener("load", function () { reveal(src); }, { once: true });
           },
           true
         );
 
         list.addEventListener("pointerleave", function () {
-          shown = false;
+          hovering = false;
           box.style.opacity = "0";
         });
       })();
