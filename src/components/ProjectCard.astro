@@ -30,7 +30,7 @@ const im = wide ? p.cover : p.card;
       src={withBase(`/images/${p.slug}/${im.src}`)}
       width={im.w}
       height={im.h}
-      alt={c.title}
+      alt=""
       loading={index < 2 ? "eager" : "lazy"}
       decoding="async"
       class="reveal-img"
@@ -50,8 +50,8 @@ const im = wide ? p.cover : p.card;
       <p class="t-body mt-1.5 line-clamp-2 text-[0.9rem] leading-snug">{c.subtitle}</p>
     </div>
     <div class="shrink-0 text-right">
-      <p class="num text-[0.8rem]" style="opacity:.55">{p.year}</p>
-      <p class="label mt-1" style="opacity:.4">{d.categories[p.category]}</p>
+      <p class="num text-[0.8rem]" style="opacity:.62">{p.year}</p>
+      <p class="label mt-1" style="opacity:.62">{d.categories[p.category]}</p>
     </div>
   </div>
 </a>

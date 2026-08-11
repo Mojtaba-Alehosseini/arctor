@@ -19,10 +19,10 @@ const d = t(locale);
       showHeading && (
         <div class="mb-10 flex flex-wrap items-end justify-between gap-6 md:mb-14" data-reveal>
           <div>
-            <p class="label reveal" style="opacity:.5">{d.index.eyebrow}</p>
+            <p class="label reveal" style="opacity:.62">{d.index.eyebrow}</p>
             <h2 class="t-h2 reveal mt-4" style="--d:60ms">{d.index.title}</h2>
           </div>
-          <p class="label reveal hidden lg:block" style="--d:120ms;opacity:.4">{d.index.note}</p>
+          <p class="label reveal hidden lg:block" style="--d:120ms;opacity:.62">{d.index.note}</p>
         </div>
       )
     }
@@ -40,7 +40,7 @@ const d = t(locale);
               data-peek-src={withBase(`/images/${p.slug}/${p.cover.src}`)}
               data-peek-bg={p.cover.bg}
             >
-              <span class="num hidden text-[0.8rem] md:block" style="opacity:.4">
+              <span class="num hidden text-[0.8rem] md:block" style="opacity:.62">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <span class="row-mark block shrink-0">
@@ -48,14 +48,14 @@ const d = t(locale);
               </span>
               <span class="min-w-0">
                 <span class="t-h3 block truncate">{c.title}</span>
-                <span class="mt-1 block truncate text-[0.9rem]" style="color:inherit;opacity:.6">
+                <span class="mt-1 block truncate text-[0.9rem]" style="color:inherit;opacity:.62">
                   {c.subtitle}
                 </span>
               </span>
-              <span class="label hidden shrink-0 md:block" style="opacity:.55">
+              <span class="label hidden shrink-0 md:block" style="opacity:.62">
                 {d.categories[p.category]}
               </span>
-              <span class="num shrink-0 text-[0.85rem]" style="opacity:.55">{p.year}</span>
+              <span class="num shrink-0 text-[0.85rem]" style="opacity:.62">{p.year}</span>
             </a>
           );
         })

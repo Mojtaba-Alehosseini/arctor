@@ -2,7 +2,7 @@
 import Mark from "./Mark.astro";
 import { t, localePath, withBase, type Locale } from "../i18n/config";
 import { site } from "../lib/site";
-import { projects } from "../data/projects";
+import { projects, projectCopy } from "../data/projects";
 
 interface Props {
   locale: Locale;
@@ -10,6 +10,7 @@ interface Props {
 const { locale } = Astro.props;
 const d = t(locale);
 const lead = projects[0];
+const leadCopy = projectCopy(lead.slug, locale);
 ---
 
 <section class="sheet relative overflow-hidden pt-[calc(var(--header-h,4.5rem)+clamp(2.5rem,7vw,6rem))]">
@@ -23,7 +24,7 @@ const lead = projects[0];
         <span style="color:var(--color-brass)">●</span>
         <span class="ml-2">{d.hero.availability}</span>
       </p>
-      <p class="label reveal" style="--d:60ms;opacity:.5">
+      <p class="label reveal" style="--d:60ms;opacity:.62">
         {site.city}, {site.country} · <span class="num">{site.coords}</span>
       </p>
     </div>
@@ -56,11 +57,11 @@ const lead = projects[0];
       <div class="md:col-span-4 md:col-start-9">
         <dl class="reveal grid grid-cols-2 gap-x-6 gap-y-5" style="--d:240ms">
           <div>
-            <dt class="label" style="opacity:.45">{d.work.roleLabel}</dt>
+            <dt class="label" style="opacity:.62">{d.work.roleLabel}</dt>
             <dd class="mt-1.5 text-[0.95rem] leading-snug">{d.hero.role}</dd>
           </div>
           <div>
-            <dt class="label" style="opacity:.45">{d.about.languagesTitle}</dt>
+            <dt class="label" style="opacity:.62">{d.about.languagesTitle}</dt>
             <dd class="num mt-1.5 text-[0.95rem] leading-snug">FA · EN · AR · IT</dd>
           </div>
         </dl>
@@ -98,7 +99,7 @@ const lead = projects[0];
               <p class="label mb-2.5" style="opacity:.75">
                 <span class="num">{lead.year}</span> · {d.categories[lead.category]}
               </p>
-              <p class="t-h3">{d.thesis.title}</p>
+              <p class="t-h3">{leadCopy.title}</p>
             </div>
           </div>
           <span class="label hidden shrink-0 items-center gap-2 sm:flex">

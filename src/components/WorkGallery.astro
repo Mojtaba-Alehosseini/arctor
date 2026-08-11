@@ -12,12 +12,17 @@ const d = t(locale);
 
 <section class="sheet pt-[calc(var(--header-h,4.5rem)+clamp(3rem,7vw,6rem))]">
   <div class="shell">
-    <p class="label" style="opacity:.5" data-reveal><span class="reveal">{d.work.eyebrow}</span></p>
+    <p class="label" style="opacity:.62" data-reveal><span class="reveal">{d.work.eyebrow}</span></p>
     <h1 class="t-h1 mt-6 measure" data-reveal><span class="reveal block">{d.work.title}</span></h1>
     <p class="t-lead measure mt-6" data-reveal><span class="reveal block">{d.work.lead}</span></p>
 
-    <div class="rule-t mt-12 flex flex-wrap items-center gap-x-2 gap-y-2 pt-5" data-reveal>
-      <span class="label reveal me-3 hidden sm:inline" style="opacity:.4">{d.work.filterLabel}</span>
+    <div
+      class="rule-t mt-12 flex flex-wrap items-center gap-x-2 gap-y-2 pt-5"
+      data-reveal
+      role="group"
+      aria-label={d.work.filterLabel}
+    >
+      <span class="label reveal me-3 hidden sm:inline" style="opacity:.62">{d.work.filterLabel}</span>
       <button
         type="button"
         class="label reveal rounded-full border px-3.5 py-2 transition-colors duration-200"
@@ -38,11 +43,15 @@ const d = t(locale);
           </button>
         ))
       }
-      <span class="num ms-auto text-[0.78rem]" style="opacity:.4" data-count>{projects.length}</span>
+      <span class="ms-auto flex items-baseline gap-1.5" aria-live="polite">
+        <span class="num text-[0.78rem]" style="opacity:.62" data-count>{projects.length}</span>
+        <span class="label" style="opacity:.62">{d.index.counter}</span>
+      </span>
     </div>
   </div>
 
   <div class="shell band-sm">
+    <h2 class="sr-only">{d.index.eyebrow}</h2>
     <div class="grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3" data-grid>
       {projects.map((p, i) => (
         <div data-cat={p.category}>

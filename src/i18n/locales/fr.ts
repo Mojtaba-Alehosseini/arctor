@@ -13,6 +13,8 @@ export default {
     close: "Fermer",
     skipToContent: "Aller au contenu",
     language: "Langue",
+    primary: "Principale",
+    footerNav: "Pied de page",
   },
   hero: {
     eyebrow: "Gênes, Italie",
@@ -202,6 +204,7 @@ export default {
   },
   footer: {
     tagline: "Architecte & architecte d'intérieur",
+    navTitle: "Pages",
     rights: "© 2026 Shirin Keshmirinejad",
     colophon: "Composé en Instrument Serif et Instrument Sans. Symboles dessinés par Shirin.",
     backToTop: "Haut de page",

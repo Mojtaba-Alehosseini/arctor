@@ -13,6 +13,8 @@ export default {
     close: "Close",
     skipToContent: "Skip to content",
     language: "Language",
+    primary: "Primary",
+    footerNav: "Footer",
   },
   hero: {
     eyebrow: "Genoa, Italy",
@@ -202,6 +204,7 @@ export default {
   },
   footer: {
     tagline: "Architect & Interior Designer",
+    navTitle: "Pages",
     rights: "© 2026 Shirin Keshmirinejad",
     colophon: "Set in Instrument Serif and Instrument Sans. Marks drawn by Shirin.",
     backToTop: "Back to top",

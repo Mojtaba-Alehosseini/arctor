@@ -13,6 +13,8 @@ export default {
     close: "Schließen",
     skipToContent: "Zum Inhalt springen",
     language: "Sprache",
+    primary: "Hauptnavigation",
+    footerNav: "Fußzeile",
   },
   hero: {
     eyebrow: "Genua, Italien",
@@ -202,6 +204,7 @@ export default {
   },
   footer: {
     tagline: "Architektin & Innenarchitektin",
+    navTitle: "Seiten",
     rights: "© 2026 Shirin Keshmirinejad",
     colophon: "Gesetzt in Instrument Serif und Instrument Sans. Signets von Shirin gezeichnet.",
     backToTop: "Nach oben",

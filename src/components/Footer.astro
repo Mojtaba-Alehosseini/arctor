@@ -30,12 +30,12 @@ const year = new Date().getFullYear();
           <Mark slug="monogram" class="h-8 w-auto" />
           <span class="t-h3">{site.name}</span>
         </a>
-        <p class="label mt-4" style="opacity:.55">{d.footer.tagline}</p>
+        <p class="label mt-4" style="opacity:.62">{d.footer.tagline}</p>
         <p class="t-body measure-sm mt-6">{d.cta.body}</p>
       </div>
 
-      <nav class="md:col-span-3" aria-label="Footer">
-        <p class="label mb-5" style="opacity:.45">{d.index.counter}</p>
+      <nav class="md:col-span-3" aria-label={d.nav.footerNav}>
+        <p class="label mb-5" style="opacity:.62">{d.footer.navTitle}</p>
         <ul class="space-y-2.5">
           <li><a class="link-grow" href={localePath(locale, "/work/")}>{d.nav.work}</a></li>
           <li><a class="link-grow" href={localePath(locale, "/about/")}>{d.nav.about}</a></li>
@@ -45,7 +45,7 @@ const year = new Date().getFullYear();
       </nav>
 
       <div class="md:col-span-4">
-        <p class="label mb-5" style="opacity:.45">{d.contact.eyebrow}</p>
+        <p class="label mb-5" style="opacity:.62">{d.contact.eyebrow}</p>
         <ul class="space-y-2.5">
           <li><a class="link-grow break-all" href={`mailto:${site.email}`}>{site.email}</a></li>
           <li><a class="link-grow" href={`tel:${site.phoneHref}`} dir="ltr">{site.phone}</a></li>
@@ -59,9 +59,9 @@ const year = new Date().getFullYear();
     </div>
 
     <div class="rule-t mt-16 flex flex-col gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between">
-      <p class="label" style="opacity:.45">© {year} {site.name}</p>
-      <p class="label hidden lg:block" style="opacity:.32">{d.footer.colophon}</p>
-      <a href="#main" class="label link-grow" style="opacity:.6">{d.footer.backToTop} ↑</a>
+      <p class="label" style="opacity:.62">© {year} {site.name}</p>
+      <p class="label hidden lg:block" style="opacity:.62">{d.footer.colophon}</p>
+      <a href="#main" class="label link-grow" style="opacity:.62">{d.footer.backToTop} ↑</a>
     </div>
   </div>
 </footer>

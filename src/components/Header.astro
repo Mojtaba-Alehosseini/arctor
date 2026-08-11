@@ -50,13 +50,13 @@ const isActive = (m: string) => pathname === m || pathname.startsWith(m + "/");
       <span class="label hidden sm:block">{site.name}</span>
     </a>
 
-    <nav class="hidden items-center gap-8 md:flex" aria-label="Primary">
+    <nav class="hidden items-center gap-8 md:flex" aria-label={d.nav.primary}>
       {
         nav.map((n) => (
           <a
             href={localePath(locale, n.href)}
             class="label link-grow py-1"
-            style={isActive(n.match) ? "opacity:1" : "opacity:.58"}
+            style={isActive(n.match) ? "opacity:1" : "opacity:.62"}
             aria-current={isActive(n.match) ? "page" : undefined}
           >
             {n.label}
@@ -74,7 +74,7 @@ const isActive = (m: string) => pathname === m || pathname.startsWith(m + "/");
               hreflang={l}
               title={LOCALE_LABELS[l]}
               class="label px-1 py-1 transition-opacity duration-200 hover:opacity-100"
-              style={l === locale ? "opacity:1;color:var(--color-brass)" : "opacity:.42"}
+              style={l === locale ? "opacity:1;color:var(--color-brass)" : "opacity:.62"}
               aria-current={l === locale ? "true" : undefined}
             >
               {LOCALE_SHORT[l]}
@@ -89,6 +89,8 @@ const isActive = (m: string) => pathname === m || pathname.startsWith(m + "/");
         aria-expanded="false"
         aria-controls="mobile-menu"
         data-menu-toggle
+        data-label-open={d.nav.menu}
+        data-label-close={d.nav.close}
       >
         <span data-menu-label>{d.nav.menu}</span>
         <span class="relative block h-[9px] w-4" aria-hidden="true">
@@ -107,7 +109,7 @@ const isActive = (m: string) => pathname === m || pathname.startsWith(m + "/");
   style="background:var(--color-paper)"
 >
   <div class="h-[var(--header-h,4.5rem)]"></div>
-  <nav class="shell flex flex-1 flex-col justify-center gap-2 pb-10" aria-label="Mobile">
+  <nav class="shell flex flex-1 flex-col justify-center gap-2 pb-10" aria-label={d.nav.menu}>
     {
       nav.map((n, i) => (
         <a
@@ -129,7 +131,7 @@ const isActive = (m: string) => pathname === m || pathname.startsWith(m + "/");
             href={localePath(l, pathname)}
             hreflang={l}
             class="label"
-            style={l === locale ? "opacity:1;color:var(--color-brass)" : "opacity:.5"}
+            style={l === locale ? "opacity:1;color:var(--color-brass)" : "opacity:.62"}
           >
             {LOCALE_SHORT[l]}
           </a>
@@ -187,11 +189,22 @@ const isActive = (m: string) => pathname === m || pathname.startsWith(m + "/");
     if (!toggle || !panel) return;
 
     var open = false;
-    var labels = { open: toggle.getAttribute("data-open-label") || "", closed: labelEl ? labelEl.textContent : "" };
+    var labelOpen = toggle.getAttribute("data-label-open") || "Menu";
+    var labelClose = toggle.getAttribute("data-label-close") || "Close";
+    var main = document.getElementById("main");
+    var footer = document.querySelector("footer");
 
     function setOpen(next) {
       open = next;
       toggle.setAttribute("aria-expanded", String(open));
+      if (labelEl) labelEl.textContent = open ? labelClose : labelOpen;
+      panel.setAttribute("aria-hidden", String(!open));
+      // Keep the rest of the page out of the tab order while the sheet is up.
+      [main, footer].forEach(function (el) {
+        if (!el) return;
+        if (open) el.setAttribute("inert", "");
+        else el.removeAttribute("inert");
+      });
       document.documentElement.toggleAttribute("data-menu-open", open);
       document.body.style.overflow = open ? "hidden" : "";
       if (bar1 && bar2) {
@@ -216,6 +229,8 @@ const isActive = (m: string) => pathname === m || pathname.startsWith(m + "/");
             { duration: 460, delay: 60 + i * 45, easing: "cubic-bezier(0.23,1,0.32,1)", fill: "both" }
           );
         });
+        var first = panel.querySelector("a");
+        if (first) first.focus({ preventScroll: true });
       } else {
         var a = panel.animate([{ opacity: 1 }, { opacity: 0 }], {
           duration: 180,
@@ -232,8 +247,10 @@ const isActive = (m: string) => pathname === m || pathname.startsWith(m + "/");
       setOpen(!open);
     });
     addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && open) setOpen(false);
+      if (e.key === "Escape" && open) {
+        setOpen(false);
+        toggle.focus({ preventScroll: true });
+      }
     });
-    void labels;
   })();
 </script>

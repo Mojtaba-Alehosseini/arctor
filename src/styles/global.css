@@ -40,7 +40,6 @@
     --bg: var(--color-paper);
     --fg: var(--color-ink);
     --muted: color-mix(in oklab, var(--color-ink) 58%, var(--color-paper));
-    --faint: color-mix(in oklab, var(--color-ink) 34%, var(--color-paper));
     --rule: color-mix(in oklab, var(--color-ink) 14%, transparent);
     --rule-soft: color-mix(in oklab, var(--color-ink) 8%, transparent);
     --accent: var(--color-brass);
@@ -61,7 +60,6 @@
     --bg: var(--color-cypress);
     --fg: #f0ece2;
     --muted: color-mix(in oklab, #f0ece2 66%, var(--color-cypress));
-    --faint: color-mix(in oklab, #f0ece2 40%, var(--color-cypress));
     --rule: color-mix(in oklab, #f0ece2 20%, transparent);
     --rule-soft: color-mix(in oklab, #f0ece2 11%, transparent);
     --accent: var(--color-brass-lt);
@@ -72,7 +70,6 @@
     --bg: var(--color-ink);
     --fg: #f0ece2;
     --muted: color-mix(in oklab, #f0ece2 62%, var(--color-ink));
-    --faint: color-mix(in oklab, #f0ece2 38%, var(--color-ink));
     --rule: color-mix(in oklab, #f0ece2 18%, transparent);
     --rule-soft: color-mix(in oklab, #f0ece2 10%, transparent);
     --accent: var(--color-brass-lt);
@@ -165,8 +162,10 @@
     max-width: 100%;
   }
 
+  /* --fg follows the surface, so the ring stays above 3:1 on paper and on the
+     dark green and ink bands alike. */
   :focus-visible {
-    outline: 2px solid var(--color-brass);
+    outline: 2px solid var(--fg);
     outline-offset: 3px;
     border-radius: 2px;
   }

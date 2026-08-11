@@ -14,7 +14,7 @@ const d = t(locale);
   <div class="shell band">
     <div class="grid gap-12 lg:grid-cols-12 lg:gap-10">
       <div class="lg:col-span-5" data-reveal>
-        <p class="label reveal" style="opacity:.55">{d.thesis.eyebrow}</p>
+        <p class="label reveal" style="opacity:.62">{d.thesis.eyebrow}</p>
         <div class="reveal mt-7 flex items-start gap-5" style="--d:60ms">
           <Mark slug="house-of-future" class="mt-1 hidden h-14 w-14 shrink-0 sm:block" style="color:var(--accent)" />
           <h2 class="t-h2">{d.thesis.title}</h2>
@@ -26,7 +26,7 @@ const d = t(locale);
           <p class="font-display text-[clamp(2.6rem,5vw,4rem)] leading-none" style="color:var(--accent)">
             {d.thesis.statValue}
           </p>
-          <p class="label measure-sm pb-2" style="opacity:.6">{d.thesis.statLabel}</p>
+          <p class="label measure-sm pb-2" style="opacity:.62">{d.thesis.statLabel}</p>
         </div>
 
         <div class="reveal mt-9" style="--d:250ms">
@@ -38,7 +38,7 @@ const d = t(locale);
       </div>
 
       <div class="lg:col-span-7" data-reveal>
-        <p class="label mb-8" style="opacity:.42">{d.thesis.diagram.title}</p>
+        <p class="label mb-8" style="opacity:.62">{d.thesis.diagram.title}</p>
         <div class="reveal" style="--d:120ms">
           <AirflowDiagram locale={locale} />
         </div>

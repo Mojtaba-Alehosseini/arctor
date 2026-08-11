@@ -13,7 +13,7 @@ const d = t(locale);
   <div class="shell">
     <div class="grid gap-10 md:grid-cols-12 md:gap-8">
       <div class="md:col-span-4" data-reveal>
-        <p class="label reveal" style="opacity:.5">{d.brands.eyebrow}</p>
+        <p class="label reveal" style="opacity:.62">{d.brands.eyebrow}</p>
         <h2 class="t-h2 reveal mt-4" style="--d:60ms">{d.brands.title}</h2>
         <p class="t-body reveal measure-sm mt-6" style="--d:110ms">{d.brands.note}</p>
       </div>
@@ -22,7 +22,7 @@ const d = t(locale);
           brands.map((b, i) => (
             <li class="rule-t flex items-baseline justify-between gap-6 py-4" data-reveal style={`--d:${i * 60}ms`}>
               <span class="reveal t-h3">{b}</span>
-              <span class="reveal num text-[0.75rem]" style={`--d:${i * 60 + 40}ms;opacity:.35`}>
+              <span class="reveal num text-[0.75rem]" style={`--d:${i * 60 + 40}ms;opacity:.62`}>
                 {String(i + 1).padStart(2, "0")}
               </span>
             </li>

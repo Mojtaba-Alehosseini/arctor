@@ -18,7 +18,7 @@ const rows = [
 
 <section class="sheet pt-[calc(var(--header-h,4.5rem)+clamp(3rem,7vw,6rem))]">
   <div class="shell">
-    <p class="label" style="opacity:.5" data-reveal><span class="reveal">{d.contact.eyebrow}</span></p>
+    <p class="label" style="opacity:.62" data-reveal><span class="reveal">{d.contact.eyebrow}</span></p>
     <h1 class="t-display mt-6" data-reveal><span class="reveal block">{d.contact.title}</span></h1>
     <p class="t-lead measure mt-8" data-reveal><span class="reveal block">{d.contact.body}</span></p>
   </div>
@@ -28,7 +28,7 @@ const rows = [
       {
         rows.map((r, i) => (
           <div class="rule-t grid gap-1 py-6 sm:grid-cols-[9rem_1fr] sm:gap-8" data-reveal style={`--d:${i * 70}ms`}>
-            <dt class="label reveal pt-1.5" style="opacity:.45">{r.label}</dt>
+            <dt class="label reveal pt-1.5" style="opacity:.62">{r.label}</dt>
             <dd class="reveal flex flex-wrap items-baseline gap-x-5 gap-y-1" style={`--d:${i * 70 + 40}ms`}>
               {r.href ? (
                 <a class="t-h3 link-grow break-all" href={r.href} dir={r.ltr ? "ltr" : undefined}>
@@ -41,7 +41,7 @@ const rows = [
                 <button
                   type="button"
                   class="label shrink-0"
-                  style="opacity:.42"
+                  style="opacity:.62"
                   data-copy={r.value}
                   data-copied-label={d.contact.copied}
                 >
@@ -53,17 +53,17 @@ const rows = [
         ))
       }
       <div class="rule-t grid gap-1 py-6 sm:grid-cols-[9rem_1fr] sm:gap-8" data-reveal>
-        <dt class="label reveal pt-1.5" style="opacity:.45">{d.contact.cvLabel}</dt>
+        <dt class="label reveal pt-1.5" style="opacity:.62">{d.contact.cvLabel}</dt>
         <dd class="reveal" style="--d:40ms">
           <a class="t-h3 link-grow" href={withBase(site.cv)} download>{d.about.downloadCv}</a>
-          <p class="label mt-1.5" style="opacity:.4">{d.contact.cvValue}</p>
+          <p class="label mt-1.5" style="opacity:.62">{d.contact.cvValue}</p>
         </dd>
       </div>
       <div class="rule-t grid gap-1 py-6 sm:grid-cols-[9rem_1fr] sm:gap-8" data-reveal>
-        <dt class="label reveal pt-1.5" style="opacity:.45">{d.contact.portfolioLabel}</dt>
+        <dt class="label reveal pt-1.5" style="opacity:.62">{d.contact.portfolioLabel}</dt>
         <dd class="reveal" style="--d:40ms">
           <a class="t-h3 link-grow" href={withBase(site.portfolio)} download>{d.about.downloadPortfolio}</a>
-          <p class="label mt-1.5" style="opacity:.4">{d.contact.portfolioValue}</p>
+          <p class="label mt-1.5" style="opacity:.62">{d.contact.portfolioValue}</p>
         </dd>
       </div>
       <div class="rule-t"></div>

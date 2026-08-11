@@ -13,6 +13,8 @@ export default {
     close: "Chiudi",
     skipToContent: "Vai al contenuto",
     language: "Lingua",
+    primary: "Principale",
+    footerNav: "Piè di pagina",
   },
   hero: {
     eyebrow: "Genova, Italia",
@@ -93,7 +95,6 @@ export default {
       { n: "04", name: "Documentazione", body: "Disegni pronti per costruire." },
       { n: "05", name: "Consegna", body: "Coordinamento in cantiere e consegna." },
     ],
-    processTitleAlt: "Processo",
     toolsTitle: "Software",
     skillsTitle: "Competenze di progetto",
     skills: ["Coordinamento di progetto", "Relazione con il cliente", "Documentazione tecnica"],
@@ -203,6 +204,7 @@ export default {
   },
   footer: {
     tagline: "Architetto e Interior Designer",
+    navTitle: "Pagine",
     rights: "© 2026 Shirin Keshmirinejad",
     colophon: "Composto in Instrument Serif e Instrument Sans. Simboli disegnati da Shirin.",
     backToTop: "Torna su",

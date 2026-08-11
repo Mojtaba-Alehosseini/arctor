@@ -13,6 +13,8 @@ export default {
     close: "بستن",
     skipToContent: "پرش به محتوا",
     language: "زبان",
+    primary: "ناوبری اصلی",
+    footerNav: "پاورقی",
   },
   hero: {
     eyebrow: "جنوا، ایتالیا",
@@ -202,6 +204,7 @@ export default {
   },
   footer: {
     tagline: "معمار و طراح داخلی",
+    navTitle: "صفحه‌ها",
     rights: "© ۲۰۲۶ شیرین کشمیری‌نژاد",
     colophon: "حروف‌چینی با Instrument Serif و Instrument Sans. نشانه‌ها طراحی شیرین.",
     backToTop: "بازگشت به بالا",

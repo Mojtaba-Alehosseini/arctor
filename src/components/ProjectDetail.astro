@@ -30,7 +30,7 @@ const facts = [
   <!-- ── Header ─────────────────────────────────────────────────────── -->
   <header class="sheet pt-[calc(var(--header-h,4.5rem)+clamp(2.5rem,6vw,5rem))]">
     <div class="shell">
-      <a class="label link-grow" style="opacity:.5" href={localePath(locale, "/work/")}>
+      <a class="label link-grow" style="opacity:.62" href={localePath(locale, "/work/")}>
         <span class="rtl-flip inline-block" aria-hidden="true">←</span>
         <span class="ms-2">{d.work.backToWork}</span>
       </a>
@@ -38,7 +38,7 @@ const facts = [
       <div class="mt-10 flex items-start gap-6 md:mt-14 md:gap-9" data-reveal>
         <Mark slug={p.slug} class="reveal mt-2 hidden h-16 w-16 shrink-0 sm:block md:h-24 md:w-24" />
         <div class="min-w-0">
-          <p class="label reveal" style="opacity:.5">
+          <p class="label reveal" style="opacity:.62">
             <span class="num">{String(p.order).padStart(2, "0")}</span> · {d.categories[p.category]} ·
             <span class="num">{p.year}</span>
           </p>
@@ -71,7 +71,7 @@ const facts = [
         {
           facts.map((f, i) => (
             <div class="rule-t py-4" data-reveal style={`--d:${i * 50}ms`}>
-              <dt class="label reveal" style="opacity:.42">{f.label}</dt>
+              <dt class="label reveal" style="opacity:.62">{f.label}</dt>
               <dd class="reveal mt-1.5 text-[0.95rem] leading-snug" style={`--d:${i * 50 + 40}ms`}>{f.value}</dd>
             </div>
           ))
@@ -100,7 +100,7 @@ const facts = [
         <div class="shell band-sm">
           <div class="flex flex-wrap items-end justify-between gap-6" data-reveal>
             <h2 class="t-h2 reveal">{d.thesis.diagram.title}</h2>
-            <p class="label reveal measure-sm" style="--d:60ms;opacity:.55">{d.thesis.statLabel}</p>
+            <p class="label reveal measure-sm" style="--d:60ms;opacity:.62">{d.thesis.statLabel}</p>
           </div>
           <div class="reveal mt-12" data-reveal style="--d:120ms">
             <AirflowDiagram locale={locale} />
@@ -114,8 +114,8 @@ const facts = [
   <section class="band-sm" style="background:var(--color-paper-2)">
     <div class="shell">
       <div class="rule-b flex flex-wrap items-baseline justify-between gap-4 pb-3" data-reveal>
-        <h2 class="label reveal" style="opacity:.5">{d.work.platesLabel}</h2>
-        <p class="label reveal" style="--d:50ms;opacity:.35">
+        <h2 class="label reveal" style="opacity:.62">{d.work.platesLabel}</h2>
+        <p class="label reveal" style="--d:50ms;opacity:.62">
           <span class="num">{String(p.plates.length).padStart(2, "0")}</span> · {d.work.platesNote}
         </p>
       </div>
@@ -151,7 +151,7 @@ const facts = [
         <span class="rtl-flip text-2xl leading-none" aria-hidden="true">←</span>
         <Mark slug={prev.slug} class="h-10 w-10 shrink-0 opacity-60" />
         <span class="min-w-0">
-          <span class="label block" style="opacity:.45">{d.work.prevProject}</span>
+          <span class="label block" style="opacity:.62">{d.work.prevProject}</span>
           <span class="t-h3 mt-1 block truncate">{prevCopy.title}</span>
         </span>
       </a>
@@ -164,7 +164,7 @@ const facts = [
         <span class="rtl-flip text-2xl leading-none" aria-hidden="true">→</span>
         <Mark slug={next.slug} class="h-10 w-10 shrink-0 opacity-60" />
         <span class="min-w-0">
-          <span class="label block" style="opacity:.45">{d.work.nextProject}</span>
+          <span class="label block" style="opacity:.62">{d.work.nextProject}</span>
           <span class="t-h3 mt-1 block truncate">{nextCopy.title}</span>
         </span>
       </a>
