@@ -1,0 +1,100 @@
+---
+import ProjectCard from "./ProjectCard.astro";
+import { t, type Locale } from "../i18n/config";
+import { projects, categories } from "../data/projects";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const d = t(locale);
+---
+
+<section class="sheet pt-[calc(var(--header-h,4.5rem)+clamp(3rem,7vw,6rem))]">
+  <div class="shell">
+    <p class="label" style="opacity:.5" data-reveal><span class="reveal">{d.work.eyebrow}</span></p>
+    <h1 class="t-h1 mt-6 measure" data-reveal><span class="reveal block">{d.work.title}</span></h1>
+    <p class="t-lead measure mt-6" data-reveal><span class="reveal block">{d.work.lead}</span></p>
+
+    <div class="rule-t mt-12 flex flex-wrap items-center gap-x-2 gap-y-2 pt-5" data-reveal>
+      <span class="label reveal me-3 hidden sm:inline" style="opacity:.4">{d.work.filterLabel}</span>
+      <button
+        type="button"
+        class="label reveal rounded-full border px-3.5 py-2 transition-colors duration-200"
+        style="border-color:var(--rule)"
+        data-filter="all"
+        aria-pressed="true">{d.categories.all}</button
+      >
+      {
+        categories.map((c, i) => (
+          <button
+            type="button"
+            class="label reveal rounded-full border px-3.5 py-2 transition-colors duration-200"
+            style={`--d:${(i + 1) * 50}ms;border-color:var(--rule)`}
+            data-filter={c}
+            aria-pressed="false"
+          >
+            {d.categories[c]}
+          </button>
+        ))
+      }
+      <span class="num ms-auto text-[0.78rem]" style="opacity:.4" data-count>{projects.length}</span>
+    </div>
+  </div>
+
+  <div class="shell band-sm">
+    <div class="grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3" data-grid>
+      {projects.map((p, i) => (
+        <div data-cat={p.category}>
+          <ProjectCard locale={locale} project={p} index={i} />
+        </div>
+      ))}
+    </div>
+    <p class="t-body mt-10 hidden" data-empty>{d.work.empty}</p>
+  </div>
+</section>
+
+<script is:inline>
+  (function () {
+    var buttons = Array.prototype.slice.call(document.querySelectorAll("[data-filter]"));
+    var cards = Array.prototype.slice.call(document.querySelectorAll("[data-cat]"));
+    var countEl = document.querySelector("[data-count]");
+    var emptyEl = document.querySelector("[data-empty]");
+    if (!buttons.length || !cards.length) return;
+
+    function paint(active) {
+      buttons.forEach(function (b) {
+        var on = b.getAttribute("data-filter") === active;
+        b.setAttribute("aria-pressed", String(on));
+        b.style.background = on ? "var(--color-ink)" : "";
+        b.style.color = on ? "var(--color-paper)" : "";
+        b.style.borderColor = on ? "var(--color-ink)" : "var(--rule)";
+      });
+    }
+
+    function apply(active) {
+      var n = 0;
+      cards.forEach(function (c) {
+        var show = active === "all" || c.getAttribute("data-cat") === active;
+        c.hidden = !show;
+        if (show) n++;
+      });
+      if (countEl) countEl.textContent = String(n);
+      if (emptyEl) emptyEl.classList.toggle("hidden", n > 0);
+      paint(active);
+      var url = new URL(location.href);
+      if (active === "all") url.searchParams.delete("c");
+      else url.searchParams.set("c", active);
+      history.replaceState(null, "", url);
+    }
+
+    buttons.forEach(function (b) {
+      b.addEventListener("click", function () {
+        apply(b.getAttribute("data-filter"));
+      });
+    });
+
+    var initial = new URL(location.href).searchParams.get("c") || "all";
+    apply(buttons.some(function (b) { return b.getAttribute("data-filter") === initial; }) ? initial : "all");
+  })();
+</script>

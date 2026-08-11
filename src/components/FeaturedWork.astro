@@ -1,61 +1,27 @@
 ---
+import ProjectCard from "./ProjectCard.astro";
+import { t, localePath, type Locale } from "../i18n/config";
 import { featuredProjects } from "../data/projects";
-import { t, type Locale, localePath, DEFAULT_LOCALE } from "../i18n/config";
 
-interface Props { locale: Locale }
+interface Props {
+  locale: Locale;
+}
 const { locale } = Astro.props;
-const dict = t(locale);
-const list = featuredProjects();
+const d = t(locale);
+const items = featuredProjects.filter((p) => p.slug !== "house-of-future");
 ---
 
-<section class="bg-[var(--color-travertine)] text-[var(--color-ink)] pt-24 sm:pt-32 pb-16 sm:pb-24">
-  <div class="container-edge">
-    <div class="grid grid-cols-12 gap-6 sm:gap-10 mb-16">
-      <div class="col-span-12 sm:col-span-8">
-        <p class="text-eyebrow opacity-60 mb-4">{dict.featured.eyebrow} — 04 / 06</p>
-        <h2 class="text-display text-[clamp(2rem,5vw,4rem)] leading-[1.05] max-w-[22ch]">
-          {dict.featured.title}
-        </h2>
-      </div>
-      <div class="hidden sm:flex col-span-4 items-end justify-end">
-        <a href={localePath(locale, "work")} class="inline-flex items-center gap-3 text-eyebrow link-underline">
-          <span>{dict.featured.viewAll}</span><span aria-hidden="true">→</span>
-        </a>
-      </div>
+<section class="sheet band-sm">
+  <div class="shell">
+    <div class="mb-10 flex flex-wrap items-end justify-between gap-6 md:mb-14" data-reveal>
+      <h2 class="t-h2 reveal measure-sm">{d.index.eyebrow}</h2>
+      <a class="label link-grow reveal" style="--d:60ms" href={localePath(locale, "/work/")}>
+        {d.index.viewAll} →
+      </a>
     </div>
 
-    <!-- 2-column poster grid -->
-    <div class="grid grid-cols-12 gap-6 sm:gap-10">
-      {list.map((p, i) => {
-        const proj = p.i18n[locale] ?? p.i18n[DEFAULT_LOCALE];
-        const wide = i === 0;
-        return (
-          <a
-            href={localePath(locale, `work/${p.slug}`)}
-            class={`group reveal-trigger block relative overflow-hidden bg-[var(--color-graphite)] ${wide ? 'col-span-12' : 'col-span-12 sm:col-span-6'}`}
-            data-cursor="large"
-          >
-            <div class={`relative ${wide ? 'aspect-[16/9] sm:aspect-[21/9]' : 'aspect-[4/5]'} overflow-hidden`}>
-              <img
-                src={p.cover}
-                alt=""
-                class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
-                loading={i < 2 ? 'eager' : 'lazy'}
-                decoding="async"
-              />
-              <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(14,14,12,0.05) 0%, rgba(14,14,12,0.55) 60%, rgba(14,14,12,0.85) 100%);"></div>
-              <div class="absolute inset-0 p-6 sm:p-10 flex flex-col justify-end text-[var(--color-travertine)]">
-                <p class="text-eyebrow opacity-80 mb-2">{String(i+1).padStart(2,'0')} · {p.category} · {p.yearShort} · {p.location}</p>
-                <h3 class="text-display text-[clamp(1.6rem,3.6vw,3.2rem)] leading-[1.05] max-w-[20ch]">{proj.title}</h3>
-                <p class="mt-3 max-w-[52ch] opacity-85">{proj.subtitle}</p>
-                <span class="mt-5 inline-flex items-center gap-2 text-eyebrow opacity-90 group-hover:opacity-100 transition-opacity">
-                  <span>View project</span><span aria-hidden="true">→</span>
-                </span>
-              </div>
-            </div>
-          </a>
-        );
-      })}
+    <div class="grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
+      {items.map((p, i) => <ProjectCard locale={locale} project={p} index={i} />)}
     </div>
   </div>
 </section>

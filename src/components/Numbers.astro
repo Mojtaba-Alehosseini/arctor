@@ -1,0 +1,27 @@
+---
+import { t, type Locale } from "../i18n/config";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const d = t(locale);
+---
+
+<section class="sheet band-sm">
+  <div class="shell">
+    <p class="label mb-9" style="opacity:.45" data-reveal><span class="reveal">{d.numbers.eyebrow}</span></p>
+    <dl class="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        d.numbers.items.map((n, i) => (
+          <div class="rule-t pt-5" data-reveal style={`--d:${i * 70}ms`}>
+            <dt class="reveal font-display text-[clamp(2.1rem,4vw,3.1rem)] leading-none">{n.value}</dt>
+            <dd class="reveal t-body measure-sm mt-3 text-[0.9rem] leading-relaxed" style={`--d:${i * 70 + 60}ms`}>
+              {n.label}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>

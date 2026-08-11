@@ -1,8 +1,20 @@
 ---
 import Base from "../layouts/Base.astro";
 import AboutContent from "../components/AboutContent.astro";
-const locale = "en" as const;
+import CtaBlock from "../components/CtaBlock.astro";
+import { DEFAULT_LOCALE, t } from "../i18n/config";
+
+const locale = DEFAULT_LOCALE;
+const d = t(locale);
 ---
-<Base locale={locale} pathname="/about">
+
+<Base
+  locale={locale}
+  pathname="/about"
+  title={`${d.about.eyebrow} — ${d.meta.title}`}
+  description={d.about.lead}
+  ogImage="/portrait.jpg"
+>
   <AboutContent locale={locale} />
+  <CtaBlock locale={locale} />
 </Base>

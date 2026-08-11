@@ -1,8 +1,19 @@
 ---
 import Base from "../layouts/Base.astro";
 import ServicesContent from "../components/ServicesContent.astro";
-const locale = "en" as const;
+import CtaBlock from "../components/CtaBlock.astro";
+import { DEFAULT_LOCALE, t } from "../i18n/config";
+
+const locale = DEFAULT_LOCALE;
+const d = t(locale);
 ---
-<Base locale={locale} pathname="/services">
+
+<Base
+  locale={locale}
+  pathname="/services"
+  title={`${d.practice.eyebrow} — ${d.meta.title}`}
+  description={d.practice.lead}
+>
   <ServicesContent locale={locale} />
+  <CtaBlock locale={locale} />
 </Base>

@@ -1,72 +1,86 @@
-# Arctor — portfolio site
+# Shirin Keshmirinejad — portfolio
 
-A personal website for **Shirin Keshmirinejad** (brand: **Arctor**) — Iranian-Italian architect & interior designer based in Genoa.
+Personal website for **Shirin Keshmirinejad**, multidisciplinary architect and interior
+designer based in Genoa, Italy.
 
-Designed and built in May 2026. Built with **Astro 5**, **React 19**, **Tailwind 4**, and **Motion** (the Framer-Motion successor).
+Built with **Astro 5**, **Tailwind CSS 4**, and no client framework — the whole site
+ships a few kilobytes of hand-written JavaScript.
 
-> *"Buildings are slow instruments. They breathe with the desert, remember the rain, and hold the people inside the way a hand holds water — gently, and with respect."*
+## The design
 
-## What's in here
+Every visual decision comes from Shirin's own material rather than a template:
 
-- Five languages out of the box: **English** (default), **Italiano**, **Deutsch**, **Français**, and **فارسی** with full **RTL** layout.
-- Six pages × 5 locales: home, work index, project detail, about, services, contact.
-- Five fully-translated project case studies, including the master's thesis on biomimetic windcatchers.
-- An ambient canvas hero with a stylised windcatcher silhouette and warm-air particles.
-- A custom cursor, reveal-on-scroll animations, marquee, and a soft grain overlay.
-- Mobile-first, accessible (`prefers-reduced-motion` honoured, semantic landmarks, skip-link).
-- Static output — deploys anywhere (GitHub Pages workflow included, also works on Vercel / Netlify / Cloudflare Pages).
+- **Palette** — the deep forest green and antique gold of her CV, the dusty rose of her
+  portfolio cover, on a warm paper ground. Nothing invented.
+- **Marks** — the ten black glyphs she drew for her portfolio (one per project) were
+  traced from the PDF into SVG (`src/lib/marks.ts`) and now run through the whole
+  interface: the work index, project headers, the footer marquee, the favicon. Her
+  blocky monogram is the site logo.
+- **Type** — Instrument Serif for display, Instrument Sans for text, IBM Plex Mono for
+  metadata (an architect's drawing labels are monospaced), Vazirmatn for Persian.
+- **Layout** — a faint six-column drawing-sheet grid, hairline rules, numbered sections.
+- **Motion** — CSS transitions on a strong ease-out curve, a clip-path wipe for images,
+  and a pointer-tracked cover preview on the work index driven by a critically damped
+  spring. All of it disabled under `prefers-reduced-motion`.
 
-## Run locally
+## Content
 
-```bash
-npm install
-npm run dev
-# open http://localhost:4321
-```
+All copy is drawn from Shirin's CV and her 63-page portfolio: ten real projects between
+2010 and 2025, real roles, real locations, real narrative. Project imagery is exported
+directly from the portfolio plates.
 
-## Build
-
-```bash
-npm run build
-# output in dist/
-```
-
-The repo ships with a GitHub Actions workflow (`.github/workflows/build.yml`) that runs `npm run build` on every push, so the build is verified in CI.
-
-A second workflow (`.github/workflows/deploy-pages.yml`) deploys to **GitHub Pages** when enabled in the repo settings (Settings → Pages → Source: GitHub Actions).
-
-## What to swap for the final version
-
-- **Portrait** — `src/components/AboutContent.astro` has an SVG placeholder. Drop a real photo into `public/portrait.jpg` and replace the SVG block with `<img src="/portrait.jpg" alt="Shirin Keshmirinejad" />`.
-- **Project images** — the case studies are text-only right now. Add cover images to `public/images/projects/{slug}.jpg` and wire them into `src/components/ProjectCard.astro` and `src/pages/work/[slug].astro`.
-- **CV PDF** — drop a CV at `public/cv-shirin-keshmirinejad.pdf` and link it from the contact page.
-- **Contact email** — `src/components/ContactContent.astro` currently uses `shirin.arctor@gmail.com` as a placeholder; swap for the preferred address.
-- **Domain / site URL** — `astro.config.mjs` currently uses `https://arctor.studio`; swap for the real domain when known.
-
-## Structure
-
-```
-src/
-├── components/    # Astro + React components (Hero, Manifesto, Thesis, etc.)
-├── data/          # Project data (with translations per locale)
-├── i18n/          # Locale config and translation dictionaries
-├── layouts/       # Base layout with header / footer
-├── pages/         # Routes — root paths for English, [lang]/ for others
-└── styles/        # global.css (Tailwind v4 theme + tokens)
-```
+The thesis section carries a purpose-drawn SVG section of *House of the Future*, showing
+the wind catcher, solar chimney, central shaft and floor inlets with animated airflow.
 
 ## Languages
 
-| Locale | Code | Direction | URL prefix |
-|---|---|---|---|
-| English | `en` | ltr | `/` (default, no prefix) |
+| Locale | Code | Direction | URL |
+| --- | --- | --- | --- |
+| English | `en` | ltr | `/` |
 | Italiano | `it` | ltr | `/it/` |
 | Deutsch | `de` | ltr | `/de/` |
 | Français | `fr` | ltr | `/fr/` |
 | فارسی | `fa` | **rtl** | `/fa/` |
 
-The language switcher in the header preserves the current page when changing locales.
+Seventy-five static pages: home, work index, ten project pages, about, practice and
+contact — in five languages, with full RTL support for Persian.
 
-## License
+## Run locally
 
-All design and content © 2026 Shirin Keshmirinejad. Code is MIT — feel free to learn from it.
+```bash
+npm install
+npm run dev      # http://localhost:4321/arctor
+npm run build    # static output in dist/
+```
+
+## Structure
+
+```
+src/
+├── components/   # Header, Hero, WorkIndex, Thesis, AirflowDiagram, …
+├── data/
+│   ├── projects.ts        # project metadata
+│   ├── projects.i18n.ts   # project copy in five languages
+│   └── images.ts          # generated image manifest (sizes + placeholder colours)
+├── i18n/         # locale config and UI dictionaries
+├── lib/
+│   ├── marks.ts  # Shirin's ten project glyphs + monogram, as SVG paths
+│   └── site.ts   # contact details and constants
+├── layouts/
+├── pages/        # root paths for English, [lang]/ for the rest
+└── styles/       # global.css — tokens, type scale, motion
+public/
+├── images/<project>/   # cover, card and portfolio plates
+├── marks/              # the glyphs as standalone SVG
+├── shirin-keshmirinejad-cv.pdf
+└── shirin-keshmirinejad-portfolio.pdf
+```
+
+## Deployment
+
+`.github/workflows/deploy-pages.yml` builds and publishes to GitHub Pages on every push
+to `main` (Settings → Pages → Source: GitHub Actions).
+
+## Licence
+
+All design and content © 2026 Shirin Keshmirinejad. Code is MIT.

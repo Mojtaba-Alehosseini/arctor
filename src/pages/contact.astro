@@ -1,8 +1,17 @@
 ---
 import Base from "../layouts/Base.astro";
 import ContactContent from "../components/ContactContent.astro";
-const locale = "en" as const;
+import { DEFAULT_LOCALE, t } from "../i18n/config";
+
+const locale = DEFAULT_LOCALE;
+const d = t(locale);
 ---
-<Base locale={locale} pathname="/contact">
+
+<Base
+  locale={locale}
+  pathname="/contact"
+  title={`${d.contact.eyebrow} — ${d.meta.title}`}
+  description={d.contact.body}
+>
   <ContactContent locale={locale} />
 </Base>

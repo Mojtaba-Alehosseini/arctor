@@ -1,13 +1,23 @@
 ---
 import Base from "../../layouts/Base.astro";
 import ServicesContent from "../../components/ServicesContent.astro";
-import { LOCALES, DEFAULT_LOCALE, type Locale } from "../../i18n/config";
+import CtaBlock from "../../components/CtaBlock.astro";
+import { LOCALES, DEFAULT_LOCALE, t, type Locale } from "../../i18n/config";
 
-export async function getStaticPaths() {
+export function getStaticPaths() {
   return LOCALES.filter((l) => l !== DEFAULT_LOCALE).map((lang) => ({ params: { lang } }));
 }
-const { lang } = Astro.params as { lang: Locale };
+
+const locale = Astro.params.lang as Locale;
+const d = t(locale);
 ---
-<Base locale={lang} pathname="/services">
-  <ServicesContent locale={lang} />
+
+<Base
+  locale={locale}
+  pathname="/services"
+  title={`${d.practice.eyebrow} — ${d.meta.title}`}
+  description={d.practice.lead}
+>
+  <ServicesContent locale={locale} />
+  <CtaBlock locale={locale} />
 </Base>

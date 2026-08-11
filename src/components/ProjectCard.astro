@@ -1,47 +1,57 @@
 ---
-import type { Project } from "../data/projects";
-import { t, type Locale, localePath, DEFAULT_LOCALE } from "../i18n/config";
+import Mark from "./Mark.astro";
+import { t, localePath, withBase, type Locale } from "../i18n/config";
+import { projectCopy, type Project } from "../data/projects";
 
-interface Props { project: Project; locale: Locale; index: number }
-const { project, locale, index } = Astro.props;
+interface Props {
+  locale: Locale;
+  project: Project;
+  index?: number;
+  wide?: boolean;
+}
+
+const { locale, project: p, index = 0, wide = false } = Astro.props;
 const d = t(locale);
-const proj = project.i18n[locale] ?? project.i18n[DEFAULT_LOCALE];
-const idx = String(index).padStart(2, "0");
+const c = projectCopy(p.slug, locale);
+const im = wide ? p.cover : p.card;
 ---
 
 <a
-  href={localePath(locale, `work/${project.slug}`)}
-  class="group block reveal-trigger relative isolate overflow-hidden"
-  data-cursor="large"
+  href={localePath(locale, `/work/${p.slug}/`)}
+  class="group block"
+  data-reveal
+  style={`--d:${Math.min(index * 70, 280)}ms`}
 >
-  <article class="grid grid-cols-12 gap-x-6 sm:gap-x-10 gap-y-4 items-stretch py-10 sm:py-14 border-t border-[color-mix(in_oklab,var(--color-ink)_18%,transparent)]">
-    <!-- left meta -->
-    <div class="col-span-2 sm:col-span-1 text-eyebrow opacity-60">{idx}</div>
-    <div class="col-span-10 sm:col-span-3 text-eyebrow opacity-60 space-y-1">
-      <p>{project.category} · {project.yearShort}</p>
-      <p>{project.location}</p>
-    </div>
+  <div
+    class={`plate plate-zoom ${wide ? "aspect-[16/10]" : "aspect-[4/5]"}`}
+    style={`background:${im.bg}`}
+  >
+    <img
+      src={withBase(`/images/${p.slug}/${im.src}`)}
+      width={im.w}
+      height={im.h}
+      alt={c.title}
+      loading={index < 2 ? "eager" : "lazy"}
+      decoding="async"
+      class="reveal-img"
+    />
+    <span
+      class="absolute top-4 left-4 flex h-9 w-9 items-center justify-center rounded-full backdrop-blur-md transition-opacity duration-500 group-hover:opacity-100 md:opacity-0"
+      style="background:color-mix(in oklab, var(--color-paper) 78%, transparent)"
+      aria-hidden="true"
+    >
+      <Mark slug={p.slug} class="h-4 w-4" style="color:var(--color-ink)" />
+    </span>
+  </div>
 
-    <!-- title + sub -->
-    <div class="col-span-12 sm:col-span-5 self-center">
-      <h3 class="text-display text-[clamp(1.6rem,3.6vw,2.8rem)] leading-[1.05] transition-transform duration-700 ease-out group-hover:translate-x-2 reveal-mask">
-        <span class="reveal-line">{proj.title}</span>
-      </h3>
-      <p class="mt-2 opacity-75 max-w-[44ch]">{proj.subtitle}</p>
+  <div class="mt-4 flex items-start justify-between gap-5">
+    <div class="min-w-0">
+      <h3 class="t-h3 text-balance">{c.title}</h3>
+      <p class="t-body mt-1.5 line-clamp-2 text-[0.9rem] leading-snug">{c.subtitle}</p>
     </div>
-
-    <!-- thumbnail (reveals on hover) -->
-    <div class="hidden sm:block col-span-3 self-stretch relative">
-      <div class="absolute inset-0 aspect-[4/3] overflow-hidden bg-[var(--color-graphite)]">
-        <img
-          src={project.cover}
-          alt=""
-          class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.06]"
-          loading="lazy"
-          decoding="async"
-        />
-        <div class="absolute inset-0 bg-[var(--color-ink)] opacity-30 group-hover:opacity-0 transition-opacity duration-500"></div>
-      </div>
+    <div class="shrink-0 text-right">
+      <p class="num text-[0.8rem]" style="opacity:.55">{p.year}</p>
+      <p class="label mt-1" style="opacity:.4">{d.categories[p.category]}</p>
     </div>
-  </article>
+  </div>
 </a>

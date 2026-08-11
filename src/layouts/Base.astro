@@ -2,20 +2,40 @@
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import { t, isRtl, withBase, localePath, type Locale, DEFAULT_LOCALE } from "../i18n/config";
+import { t, isRtl, withBase, localePath, type Locale, DEFAULT_LOCALE, LOCALES } from "../i18n/config";
+import { site } from "../lib/site";
 
 export interface Props {
   locale?: Locale;
   title?: string;
   description?: string;
-  pathname?: string; // path within the locale (e.g. "/work")
+  pathname?: string;
+  ogImage?: string;
 }
 
-const { locale = DEFAULT_LOCALE, title, description, pathname = "/" } = Astro.props;
-const dict = t(locale);
-const pageTitle = title ?? dict.meta.title;
-const pageDesc = description ?? dict.meta.description;
+const { locale = DEFAULT_LOCALE, title, description, pathname = "/", ogImage } = Astro.props;
+const d = t(locale);
+const pageTitle = title ?? d.meta.title;
+const pageDesc = description ?? d.meta.description;
 const dir = isRtl(locale) ? "rtl" : "ltr";
+const og = withBase(ogImage ?? "/images/house-of-future/cover.jpg");
+const canonical = new URL(localePath(locale, pathname), Astro.site ?? Astro.url.origin).toString();
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: site.name,
+  jobTitle: site.role,
+  email: `mailto:${site.email}`,
+  telephone: site.phone,
+  url: canonical,
+  address: { "@type": "PostalAddress", addressLocality: site.city, addressCountry: "IT" },
+  alumniOf: [
+    { "@type": "CollegeOrUniversity", name: "Università degli Studi di Genova" },
+    { "@type": "CollegeOrUniversity", name: "Payame Noor University" },
+  ],
+  knowsLanguage: ["fa", "en", "ar", "it"],
+};
 ---
 
 <!doctype html>
@@ -24,103 +44,162 @@ const dir = isRtl(locale) ? "rtl" : "ltr";
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#f2efe7" />
     <title>{pageTitle}</title>
     <meta name="description" content={pageDesc} />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDesc} />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content={locale} />
+    <meta property="og:image" content={og} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDesc} />
+    <meta name="twitter:image" content={og} />
+
     <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
-    <link rel="alternate" hreflang="en" href={Astro.url.origin + localePath("en", pathname)} />
-    <link rel="alternate" hreflang="it" href={Astro.url.origin + localePath("it", pathname)} />
-    <link rel="alternate" hreflang="de" href={Astro.url.origin + localePath("de", pathname)} />
-    <link rel="alternate" hreflang="fr" href={Astro.url.origin + localePath("fr", pathname)} />
-    <link rel="alternate" hreflang="fa" href={Astro.url.origin + localePath("fa", pathname)} />
-    <link rel="alternate" hreflang="x-default" href={Astro.url.origin + localePath("en", pathname)} />
+    <link rel="apple-touch-icon" href={withBase("/favicon.svg")} />
+
+    {
+      LOCALES.map((l) => (
+        <link rel="alternate" hreflang={l} href={new URL(localePath(l, pathname), Astro.site ?? Astro.url.origin).toString()} />
+      ))
+    }
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={new URL(localePath("en", pathname), Astro.site ?? Astro.url.origin).toString()}
+    />
+
+    <set:html value={`<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`} />
   </head>
-  <body class="min-h-screen antialiased">
-    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-[var(--color-ink)] focus:text-[var(--color-travertine)] focus:px-3 focus:py-2 focus:rounded">{dict.nav.skipToContent}</a>
+
+  <body class="antialiased">
+    <a
+      href="#main"
+      class="label sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-full focus:bg-[var(--color-ink)] focus:px-4 focus:py-3 focus:text-[var(--color-paper)]"
+      >{d.nav.skipToContent}</a
+    >
+
     <Header locale={locale} pathname={pathname} />
+
     <main id="main">
       <slot />
     </main>
+
     <Footer locale={locale} />
 
-    <!-- Reveal on view -->
+    <!-- Reveal on scroll ------------------------------------------------ -->
     <script is:inline>
       (function () {
-        if (typeof window === "undefined") return;
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-          document.querySelectorAll(".reveal-trigger").forEach((el) => el.classList.add("in-view"));
-          return;
+        var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        function all(sel) {
+          return Array.prototype.slice.call(document.querySelectorAll(sel));
         }
-        function init() {
-          // Anything in (or above) the initial viewport gets revealed immediately
-          const vh = window.innerHeight;
-          document.querySelectorAll(".reveal-trigger").forEach((el) => {
-            const r = el.getBoundingClientRect();
-            if (r.top < vh) el.classList.add("in-view");
+        function run() {
+          var nodes = all("[data-reveal]");
+          if (reduce) {
+            nodes.forEach(function (n) {
+              n.classList.add("in-view");
+            });
+            return;
+          }
+          var vh = innerHeight;
+          nodes.forEach(function (n) {
+            if (n.getBoundingClientRect().top < vh * 0.92) n.classList.add("in-view");
           });
-          const io = new IntersectionObserver(
-            (entries) => {
-              entries.forEach((e) => {
+          var io = new IntersectionObserver(
+            function (entries) {
+              entries.forEach(function (e) {
                 if (e.isIntersecting) {
                   e.target.classList.add("in-view");
                   io.unobserve(e.target);
                 }
               });
             },
-            { rootMargin: "0px 0px -5% 0px", threshold: 0.01 }
+            { rootMargin: "0px 0px -8% 0px", threshold: 0.05 }
           );
-          document.querySelectorAll(".reveal-trigger:not(.in-view)").forEach((el) => io.observe(el));
+          nodes.forEach(function (n) {
+            if (!n.classList.contains("in-view")) io.observe(n);
+          });
         }
-        if (document.readyState === "loading") {
-          document.addEventListener("DOMContentLoaded", init);
-        } else {
-          init();
-        }
+        if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", run);
+        else run();
       })();
     </script>
 
-    <!-- Custom cursor (desktop only) -->
+    <!-- Pointer-tracked cover preview for the work index ----------------- -->
     <script is:inline>
       (function () {
-        if (typeof window === "undefined") return;
-        if (window.matchMedia("(pointer: coarse)").matches) return;
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-        const ring = document.createElement("div");
-        ring.setAttribute("aria-hidden", "true");
-        ring.style.cssText =
-          "position:fixed;top:0;left:0;width:28px;height:28px;border:1px solid var(--color-ink);border-radius:50%;pointer-events:none;z-index:9999;transform:translate3d(-100px,-100px,0);transition:transform .15s ease,opacity .2s ease,width .25s ease,height .25s ease,border-color .25s ease;mix-blend-mode:difference;will-change:transform;opacity:.65";
-        document.body.appendChild(ring);
-        let x = -100,
-          y = -100,
-          tx = -100,
-          ty = -100;
-        addEventListener("mousemove", (e) => {
-          x = e.clientX;
-          y = e.clientY;
-        });
+        if (matchMedia("(pointer: coarse)").matches) return;
+        if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        var list = document.querySelector("[data-peek-list]");
+        if (!list) return;
+
+        var box = document.createElement("div");
+        box.className = "peek";
+        box.setAttribute("aria-hidden", "true");
+        var im = document.createElement("img");
+        im.decoding = "async";
+        box.appendChild(im);
+        document.body.appendChild(box);
+
+        var tx = 0,
+          ty = 0,
+          x = 0,
+          y = 0,
+          vx = 0,
+          vy = 0,
+          shown = false,
+          raf = 0;
+
+        // Critically damped spring — no overshoot, interruptible at any moment.
         function tick() {
-          tx += (x - tx) * 0.22;
-          ty += (y - ty) * 0.22;
-          ring.style.transform = `translate3d(${tx - 14}px, ${ty - 14}px, 0)`;
-          requestAnimationFrame(tick);
+          var k = 0.11,
+            damp = 0.74;
+          vx = (vx + (tx - x) * k) * damp;
+          vy = (vy + (ty - y) * k) * damp;
+          x += vx;
+          y += vy;
+          var skew = Math.max(-6, Math.min(6, vy * 0.16));
+          box.style.transform =
+            "translate3d(" + (x - box.offsetWidth / 2) + "px," + (y - box.offsetHeight / 2) + "px,0) rotate(" + skew * 0.35 + "deg)";
+          raf = requestAnimationFrame(tick);
         }
-        tick();
-        // Grow on links
-        function bind() {
-          document.querySelectorAll("a, button, [data-cursor=large]").forEach((el) => {
-            el.addEventListener("mouseenter", () => {
-              ring.style.width = "60px";
-              ring.style.height = "60px";
-            });
-            el.addEventListener("mouseleave", () => {
-              ring.style.width = "28px";
-              ring.style.height = "28px";
-            });
-          });
-        }
-        bind();
+
+        list.addEventListener("pointermove", function (e) {
+          tx = e.clientX;
+          ty = e.clientY;
+          if (!shown) {
+            x = tx;
+            y = ty;
+          }
+        });
+
+        list.addEventListener(
+          "pointerover",
+          function (e) {
+            var row = e.target.closest ? e.target.closest("[data-peek-src]") : null;
+            if (!row) return;
+            var src = row.getAttribute("data-peek-src");
+            if (im.getAttribute("src") !== src) im.setAttribute("src", src);
+            box.style.background = row.getAttribute("data-peek-bg") || "";
+            if (!shown) {
+              shown = true;
+              box.style.opacity = "1";
+              if (!raf) raf = requestAnimationFrame(tick);
+            }
+          },
+          true
+        );
+
+        list.addEventListener("pointerleave", function () {
+          shown = false;
+          box.style.opacity = "0";
+        });
       })();
     </script>
   </body>

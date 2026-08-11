@@ -1,0 +1,77 @@
+---
+import Mark from "./Mark.astro";
+import { t, localePath, withBase, type Locale } from "../i18n/config";
+import { projects as allProjects, projectCopy, type Project } from "../data/projects";
+
+interface Props {
+  locale: Locale;
+  items?: Project[];
+  showHeading?: boolean;
+}
+
+const { locale, items = allProjects, showHeading = true } = Astro.props;
+const d = t(locale);
+---
+
+<section class="sheet band-sm">
+  <div class="shell">
+    {
+      showHeading && (
+        <div class="mb-10 flex flex-wrap items-end justify-between gap-6 md:mb-14" data-reveal>
+          <div>
+            <p class="label reveal" style="opacity:.5">{d.index.eyebrow}</p>
+            <h2 class="t-h2 reveal mt-4" style="--d:60ms">{d.index.title}</h2>
+          </div>
+          <p class="label reveal hidden lg:block" style="--d:120ms;opacity:.4">{d.index.note}</p>
+        </div>
+      )
+    }
+
+    <div data-peek-list>
+      {
+        items.map((p, i) => {
+          const c = projectCopy(p.slug, locale);
+          return (
+            <a
+              href={localePath(locale, `/work/${p.slug}/`)}
+              class="row grid-cols-[auto_1fr_auto] md:grid-cols-[2.75rem_auto_1fr_auto_auto] md:gap-6"
+              style={`--d:${Math.min(i * 45, 320)}ms`}
+              data-reveal
+              data-peek-src={withBase(`/images/${p.slug}/${p.cover.src}`)}
+              data-peek-bg={p.cover.bg}
+            >
+              <span class="num hidden text-[0.8rem] md:block" style="opacity:.4">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <span class="row-mark block shrink-0">
+                <Mark slug={p.slug} class="h-9 w-9 md:h-11 md:w-11" />
+              </span>
+              <span class="min-w-0">
+                <span class="t-h3 block truncate">{c.title}</span>
+                <span class="mt-1 block truncate text-[0.9rem]" style="color:inherit;opacity:.6">
+                  {c.subtitle}
+                </span>
+              </span>
+              <span class="label hidden shrink-0 md:block" style="opacity:.55">
+                {d.categories[p.category]}
+              </span>
+              <span class="num shrink-0 text-[0.85rem]" style="opacity:.55">{p.year}</span>
+            </a>
+          );
+        })
+      }
+      <div class="rule-t"></div>
+    </div>
+
+    {
+      showHeading && (
+        <div class="mt-10" data-reveal>
+          <a class="btn reveal" href={localePath(locale, "/work/")}>
+            {d.index.viewAll}
+            <span class="arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+      )
+    }
+  </div>
+</section>

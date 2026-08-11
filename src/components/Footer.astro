@@ -1,54 +1,67 @@
 ---
-import { t, type Locale, localePath } from "../i18n/config";
 import Mark from "./Mark.astro";
-interface Props { locale: Locale }
+import { t, localePath, withBase, type Locale } from "../i18n/config";
+import { site } from "../lib/site";
+import { projects } from "../data/projects";
+
+interface Props {
+  locale: Locale;
+}
 const { locale } = Astro.props;
-const dict = t(locale);
+const d = t(locale);
+const year = new Date().getFullYear();
 ---
 
-<footer class="bg-[var(--color-ink)] text-[var(--color-travertine)] mt-32">
-  <div class="container-edge py-20">
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
-      <div class="md:col-span-5">
-        <a href={localePath(locale, "/")} class="inline-flex items-center gap-2 text-eyebrow tracking-[0.18em]">
-          <Mark class="w-5 h-5 text-current" />
-          <span>Arctor</span>
-        </a>
-        <p class="mt-6 text-display text-4xl sm:text-5xl max-w-md leading-[1.05]">
-          {dict.cta.title}
-        </p>
-        <a
-          href={localePath(locale, "contact")}
-          class="mt-8 inline-flex items-center gap-3 text-eyebrow link-underline"
-        >
-          <span>{dict.cta.button}</span>
-          <span aria-hidden="true">→</span>
-        </a>
+<footer class="on-ink grain relative overflow-hidden">
+  <div class="shell band-sm">
+    <!-- Mark strip: her ten project glyphs -->
+    <div class="marquee mb-14 md:mb-20" style="--speed:64s" aria-hidden="true">
+      <div class="marquee__track">
+        {projects.map((p) => <Mark slug={p.slug} class="h-7 w-7 shrink-0 opacity-30 md:h-9 md:w-9" />)}
       </div>
-
-      <div class="md:col-span-3">
-        <p class="text-eyebrow opacity-60 mb-4">{dict.nav.about}</p>
-        <ul class="space-y-2 text-sm">
-          <li><a href={localePath(locale, "work")} class="link-underline">{dict.nav.work}</a></li>
-          <li><a href={localePath(locale, "about")} class="link-underline">{dict.nav.about}</a></li>
-          <li><a href={localePath(locale, "services")} class="link-underline">{dict.nav.services}</a></li>
-          <li><a href={localePath(locale, "contact")} class="link-underline">{dict.nav.contact}</a></li>
-        </ul>
-      </div>
-
-      <div class="md:col-span-4">
-        <p class="text-eyebrow opacity-60 mb-4">{dict.contact.eyebrow}</p>
-        <ul class="space-y-2 text-sm">
-          <li><a href="mailto:shirin.arctor@gmail.com" class="link-underline">shirin.arctor@gmail.com</a></li>
-          <li><a href="https://www.linkedin.com/in/shirin-keshmirinejad-arctor-407653152/" target="_blank" rel="noopener" class="link-underline">LinkedIn — Shirin Keshmirinejad</a></li>
-        </ul>
-        <p class="mt-8 text-xs opacity-50">{dict.footer.location}</p>
+      <div class="marquee__track">
+        {projects.map((p) => <Mark slug={p.slug} class="h-7 w-7 shrink-0 opacity-30 md:h-9 md:w-9" />)}
       </div>
     </div>
 
-    <div class="mt-20 pt-8 border-t border-[color-mix(in_oklab,var(--color-travertine)_15%,transparent)] flex flex-col sm:flex-row justify-between items-start gap-4">
-      <p class="text-xs opacity-50">{dict.footer.rights}</p>
-      <a href="#main" class="text-eyebrow link-underline">{dict.footer.backToTop} ↑</a>
+    <div class="grid gap-12 md:grid-cols-12 md:gap-8">
+      <div class="md:col-span-5">
+        <a href={localePath(locale, "/")} class="inline-flex items-center gap-3">
+          <Mark slug="monogram" class="h-8 w-auto" />
+          <span class="t-h3">{site.name}</span>
+        </a>
+        <p class="label mt-4" style="opacity:.55">{d.footer.tagline}</p>
+        <p class="t-body measure-sm mt-6">{d.cta.body}</p>
+      </div>
+
+      <nav class="md:col-span-3" aria-label="Footer">
+        <p class="label mb-5" style="opacity:.45">{d.index.counter}</p>
+        <ul class="space-y-2.5">
+          <li><a class="link-grow" href={localePath(locale, "/work/")}>{d.nav.work}</a></li>
+          <li><a class="link-grow" href={localePath(locale, "/about/")}>{d.nav.about}</a></li>
+          <li><a class="link-grow" href={localePath(locale, "/services/")}>{d.nav.practice}</a></li>
+          <li><a class="link-grow" href={localePath(locale, "/contact/")}>{d.nav.contact}</a></li>
+        </ul>
+      </nav>
+
+      <div class="md:col-span-4">
+        <p class="label mb-5" style="opacity:.45">{d.contact.eyebrow}</p>
+        <ul class="space-y-2.5">
+          <li><a class="link-grow break-all" href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li><a class="link-grow" href={`tel:${site.phoneHref}`} dir="ltr">{site.phone}</a></li>
+          <li class="pt-1" style="color:var(--muted)">{site.city}, {site.country}</li>
+        </ul>
+        <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2">
+          <a class="label link-grow" href={withBase(site.cv)} download>{d.about.downloadCv}</a>
+          <a class="label link-grow" href={withBase(site.portfolio)} download>{d.about.downloadPortfolio}</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule-t mt-16 flex flex-col gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between">
+      <p class="label" style="opacity:.45">© {year} {site.name}</p>
+      <p class="label hidden lg:block" style="opacity:.32">{d.footer.colophon}</p>
+      <a href="#main" class="label link-grow" style="opacity:.6">{d.footer.backToTop} ↑</a>
     </div>
   </div>
 </footer>

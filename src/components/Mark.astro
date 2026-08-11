@@ -1,10 +1,30 @@
 ---
-interface Props { class?: string }
-const { class: className = "" } = Astro.props;
+import { marks } from "../lib/marks";
+
+interface Props {
+  slug: string;
+  class?: string;
+  style?: string;
+  label?: string;
+}
+
+const { slug, class: cls = "", style, label } = Astro.props;
+const m = marks[slug];
 ---
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" class={className} aria-hidden="true">
-  <!-- Stylised "A" with a windcatcher slot — the Arctor mark -->
-  <path d="M6 26 L16 4 L26 26" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-  <path d="M12 18 L20 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-  <path d="M16 8 L16 14" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="1 2" />
-</svg>
+
+{
+  m && (
+    <svg
+      class={`mark ${cls}`}
+      style={style}
+      viewBox={m.vb}
+      fill="currentColor"
+      preserveAspectRatio="xMidYMid meet"
+      role={label ? "img" : "presentation"}
+      aria-label={label}
+      aria-hidden={label ? undefined : "true"}
+    >
+      <path fill-rule="evenodd" d={m.d} />
+    </svg>
+  )
+}

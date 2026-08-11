@@ -1,27 +1,19 @@
 ---
 import Base from "../../layouts/Base.astro";
-import ProjectCard from "../../components/ProjectCard.astro";
-import { projects } from "../../data/projects";
-import { t } from "../../i18n/config";
+import WorkGallery from "../../components/WorkGallery.astro";
+import CtaBlock from "../../components/CtaBlock.astro";
+import { DEFAULT_LOCALE, t } from "../../i18n/config";
 
-const locale = "en" as const;
-const dict = t(locale);
+const locale = DEFAULT_LOCALE;
+const d = t(locale);
 ---
 
-<Base locale={locale} pathname="/work">
-  <section class="pt-36 sm:pt-44 pb-12 bg-[var(--color-travertine)] text-[var(--color-ink)]">
-    <div class="container-edge">
-      <p class="text-eyebrow opacity-60 mb-6">{dict.work.eyebrow}</p>
-      <h1 class="text-display text-[clamp(2.4rem,6vw,5rem)] leading-[1.02] max-w-[26ch]">{dict.work.title}</h1>
-      <p class="mt-6 max-w-[60ch] text-base sm:text-lg opacity-80">A small but considered body of work — research, architecture, interior, and showroom — spanning Iran and Italy.</p>
-    </div>
-  </section>
-
-  <section class="bg-[var(--color-travertine)] text-[var(--color-ink)] pb-32 pt-4">
-    <div class="container-edge">
-      {projects.map((p, i) => (
-        <ProjectCard project={p} locale={locale} index={i + 1} />
-      ))}
-    </div>
-  </section>
+<Base
+  locale={locale}
+  pathname="/work"
+  title={`${d.work.eyebrow} — ${d.meta.title}`}
+  description={d.work.lead}
+>
+  <WorkGallery locale={locale} />
+  <CtaBlock locale={locale} />
 </Base>

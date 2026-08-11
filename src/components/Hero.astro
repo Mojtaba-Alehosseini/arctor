@@ -1,72 +1,112 @@
 ---
-import { t, type Locale, localePath } from "../i18n/config";
-import { HERO_IMAGE, HERO_IMAGE_ALT } from "../data/heroImage";
+import Mark from "./Mark.astro";
+import { t, localePath, withBase, type Locale } from "../i18n/config";
+import { site } from "../lib/site";
+import { projects } from "../data/projects";
 
-interface Props { locale: Locale }
+interface Props {
+  locale: Locale;
+}
 const { locale } = Astro.props;
-const dict = t(locale);
+const d = t(locale);
+const lead = projects[0];
 ---
 
-<section class="relative min-h-[100svh] w-full overflow-hidden bg-[var(--color-ink)] text-[var(--color-travertine)]">
-  <!-- Full-bleed hero photograph -->
-  <div class="absolute inset-0">
-    <img
-      src={HERO_IMAGE}
-      alt={HERO_IMAGE_ALT}
-      class="absolute inset-0 w-full h-full object-cover"
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
-    />
-    <!-- subtle bottom vignette so text remains readable without smothering the photo -->
-    <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(14,14,12,0.15) 0%, rgba(14,14,12,0.05) 30%, rgba(14,14,12,0.45) 75%, rgba(14,14,12,0.82) 100%);"></div>
-    <!-- subtle grain -->
-    <div class="absolute inset-0 grain opacity-60 mix-blend-overlay"></div>
-  </div>
-
-  <!-- Content scaffold -->
-  <div class="relative container-edge pt-28 sm:pt-32 pb-10 min-h-[100svh] flex flex-col">
-    <!-- top eyebrow row -->
-    <div class="flex items-start justify-between text-eyebrow opacity-80 mb-16 sm:mb-24">
-      <p>{dict.hero.eyebrow}</p>
-      <p class="hidden sm:block">{dict.hero.counterLabel} · 01 / 06</p>
+<section class="sheet relative overflow-hidden pt-[calc(var(--header-h,4.5rem)+clamp(2.5rem,7vw,6rem))]">
+  <div class="shell">
+    <!-- top meta rail -->
+    <div
+      class="rule-b flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2 pb-4"
+      data-reveal
+    >
+      <p class="label reveal" style="--d:0ms">
+        <span style="color:var(--color-brass)">●</span>
+        <span class="ml-2">{d.hero.availability}</span>
+      </p>
+      <p class="label reveal" style="--d:60ms;opacity:.5">
+        {site.city}, {site.country} · <span class="num">{site.coords}</span>
+      </p>
     </div>
 
-    <!-- left-aligned headline + meta, anchored bottom-left -->
-    <div class="mt-auto reveal-trigger max-w-none">
-      <h1 class="text-display text-[clamp(1.75rem,4.6vw,4.25rem)] leading-[1.04] tracking-tight max-w-[24ch]">
-        {dict.hero.headlineLines.map((line, i) => (
-          <span class="reveal-mask block" style={`--reveal-delay: ${i * 110}ms`}>
-            <span class="reveal-line">{line}</span>
+    <!-- headline -->
+    <h1 class="t-display mt-8 md:mt-12" data-reveal>
+      {
+        d.hero.headline.map((line, i) => (
+          <span class="block overflow-hidden">
+            <span class="reveal block" style={`--d:${90 + i * 90}ms`}>
+              {i % 2 === 1 ? <em class="not-italic" style="color:var(--muted)">{line}</em> : line}
+            </span>
           </span>
-        ))}
-      </h1>
+        ))
+      }
+    </h1>
 
-      <p class="mt-8 max-w-[52ch] text-base sm:text-lg opacity-90 leading-relaxed">
-        {dict.hero.intro}
-      </p>
+    <div class="mt-10 grid gap-10 md:mt-16 md:grid-cols-12 md:gap-8" data-reveal>
+      <div class="md:col-span-5 md:col-start-1">
+        <p class="t-lead measure reveal" style="--d:120ms">{d.hero.intro}</p>
+        <div class="mt-8 flex flex-wrap items-center gap-3 reveal" style="--d:190ms">
+          <a class="btn btn-solid" href={localePath(locale, "/work/")}>
+            {d.hero.ctaWork}
+            <span class="arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="btn" href={localePath(locale, "/contact/")}>{d.hero.ctaContact}</a>
+        </div>
+      </div>
 
-      <div class="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
-        <a
-          href={localePath(locale, "work")}
-          class="inline-flex items-center gap-3 text-eyebrow link-underline"
-        >
-          <span>{dict.hero.cta}</span>
-          <span aria-hidden="true">→</span>
-        </a>
-        <a
-          href={localePath(locale, "contact")}
-          class="text-eyebrow opacity-70 hover:opacity-100 transition-opacity link-underline"
-        >
-          {dict.nav.contact}
-        </a>
+      <div class="md:col-span-4 md:col-start-9">
+        <dl class="reveal grid grid-cols-2 gap-x-6 gap-y-5" style="--d:240ms">
+          <div>
+            <dt class="label" style="opacity:.45">{d.work.roleLabel}</dt>
+            <dd class="mt-1.5 text-[0.95rem] leading-snug">{d.hero.role}</dd>
+          </div>
+          <div>
+            <dt class="label" style="opacity:.45">{d.about.languagesTitle}</dt>
+            <dd class="num mt-1.5 text-[0.95rem] leading-snug">FA · EN · AR · IT</dd>
+          </div>
+        </dl>
       </div>
     </div>
+  </div>
 
-    <!-- bottom row -->
-    <div class="mt-10 sm:mt-14 pt-6 border-t border-[color-mix(in_oklab,var(--color-travertine)_18%,transparent)] flex items-end justify-between text-eyebrow opacity-70">
-      <p>{dict.hero.scrollHint} ↓</p>
-      <p class="hidden sm:block">Genova · 44°24′N · 8°56′E</p>
-    </div>
+  <!-- lead image -->
+  <div class="shell-wide mt-14 md:mt-20">
+    <a
+      href={localePath(locale, `/work/${lead.slug}/`)}
+      class="plate plate-zoom group block aspect-[16/10] w-full md:aspect-[21/9]"
+      style={`background:${lead.cover.bg}`}
+      data-reveal
+    >
+      <img
+        src={withBase(`/images/${lead.slug}/${lead.cover.src}`)}
+        width={lead.cover.w}
+        height={lead.cover.h}
+        alt=""
+        fetchpriority="high"
+        decoding="async"
+        class="reveal-img"
+      />
+      <div
+        class="pointer-events-none absolute inset-0"
+        style="background:linear-gradient(to top, rgb(20 23 15 / .55), rgb(20 23 15 / .05) 42%, transparent 70%)"
+      >
+      </div>
+      <div class="absolute inset-x-0 bottom-0 p-[var(--gutter)]" style="color:#f0ece2">
+        <div class="flex items-end justify-between gap-6">
+          <div class="flex items-end gap-4">
+            <Mark slug={lead.slug} class="hidden h-10 w-10 shrink-0 opacity-90 sm:block" />
+            <div>
+              <p class="label mb-2.5" style="opacity:.75">
+                <span class="num">{lead.year}</span> · {d.categories[lead.category]}
+              </p>
+              <p class="t-h3">{d.thesis.title}</p>
+            </div>
+          </div>
+          <span class="label hidden shrink-0 items-center gap-2 sm:flex">
+            {d.index.viewProject}
+            <span class="arrow rtl-flip" aria-hidden="true">→</span>
+          </span>
+        </div>
+      </div>
+    </a>
   </div>
 </section>

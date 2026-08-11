@@ -1,113 +1,239 @@
 ---
-import { t, LOCALES, LOCALE_SHORT, DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
 import Mark from "./Mark.astro";
+import {
+  t,
+  localePath,
+  LOCALES,
+  LOCALE_SHORT,
+  LOCALE_LABELS,
+  type Locale,
+} from "../i18n/config";
+import { site } from "../lib/site";
 
 interface Props {
   locale: Locale;
-  pathname: string;
+  pathname?: string;
 }
-const { locale, pathname } = Astro.props;
-const dict = t(locale);
 
-const navItems = [
-  { href: "work", label: dict.nav.work },
-  { href: "about", label: dict.nav.about },
-  { href: "services", label: dict.nav.services },
-  { href: "contact", label: dict.nav.contact },
+const { locale, pathname = "/" } = Astro.props;
+const d = t(locale);
+
+const nav = [
+  { href: "/work/", label: d.nav.work, match: "/work" },
+  { href: "/about/", label: d.nav.about, match: "/about" },
+  { href: "/services/", label: d.nav.practice, match: "/services" },
+  { href: "/contact/", label: d.nav.contact, match: "/contact" },
 ];
+
+const isActive = (m: string) => pathname === m || pathname.startsWith(m + "/");
 ---
 
-<header class="fixed inset-x-0 top-0 z-40 mix-blend-difference" data-header>
-  <div class="container-edge flex h-[68px] items-center justify-between text-[var(--color-travertine)]">
-    <a href={localePath(locale, "/")} class="flex items-center gap-2 text-eyebrow tracking-[0.18em] hover:opacity-70 transition-opacity">
-      <Mark class="w-5 h-5 text-current" />
-      <span>Arctor</span>
-    </a>
-
-    <!-- desktop nav -->
-    <nav class="hidden md:flex items-center gap-8 text-eyebrow">
-      {navItems.map((item) => (
-        <a href={localePath(locale, item.href)} class="link-underline">{item.label}</a>
-      ))}
-      <div class="flex items-center gap-3 ms-4 ps-4 border-s border-[color-mix(in_oklab,var(--color-travertine)_25%,transparent)]">
-        {LOCALES.map((l) => (
-          <a
-            href={localePath(l, pathname)}
-            class={`text-[10px] tracking-[0.18em] uppercase transition-opacity hover:opacity-100 ${l === locale ? 'opacity-100' : 'opacity-50'}`}
-            aria-current={l === locale ? 'page' : undefined}
-          >
-            {LOCALE_SHORT[l]}
-          </a>
-        ))}
-      </div>
-    </nav>
-
-    <!-- mobile menu button -->
-    <button
-      class="md:hidden text-eyebrow tracking-[0.18em] flex items-center gap-2"
-      aria-expanded="false"
-      aria-controls="mobile-menu"
-      data-mobile-menu-btn
-    >
-      <span data-menu-open>Menu</span>
-      <span data-menu-close class="hidden">Close</span>
-    </button>
+<header
+  id="site-header"
+  class="fixed inset-x-0 top-0 z-50 transition-transform duration-500 will-change-transform"
+  data-header
+>
+  <div
+    class="pointer-events-none absolute inset-0 -z-10 opacity-0 transition-opacity duration-400"
+    data-header-veil
+    style="background:color-mix(in oklab, var(--color-paper) 82%, transparent);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--rule-soft)"
+  >
   </div>
 
-  <!-- mobile menu -->
-  <div
-    id="mobile-menu"
-    class="md:hidden fixed inset-0 z-30 bg-[var(--color-ink)] text-[var(--color-travertine)] transition-opacity duration-500 opacity-0 pointer-events-none"
-    data-mobile-menu
-  >
-    <div class="container-edge h-full flex flex-col justify-between pt-24 pb-16">
-      <nav class="flex flex-col gap-6">
-        {navItems.map((item) => (
+  <div class="shell flex h-[var(--header-h,4.5rem)] items-center justify-between gap-6">
+    <a
+      href={localePath(locale, "/")}
+      class="group flex items-center gap-2.5"
+      aria-label={site.name}
+    >
+      <Mark slug="monogram" class="h-[1.35rem] w-auto transition-transform duration-500 group-hover:rotate-[-4deg]" />
+      <span class="label hidden sm:block">{site.name}</span>
+    </a>
+
+    <nav class="hidden items-center gap-8 md:flex" aria-label="Primary">
+      {
+        nav.map((n) => (
           <a
-            href={localePath(locale, item.href)}
-            class="text-display text-5xl sm:text-6xl tracking-tight"
-          >{item.label}</a>
-        ))}
-      </nav>
-      <div class="flex flex-wrap gap-4 text-eyebrow tracking-[0.18em] opacity-75">
-        {LOCALES.map((l) => (
-          <a
-            href={localePath(l, pathname)}
-            class={`${l === locale ? 'opacity-100' : 'opacity-50'} hover:opacity-100 transition-opacity`}
+            href={localePath(locale, n.href)}
+            class="label link-grow py-1"
+            style={isActive(n.match) ? "opacity:1" : "opacity:.58"}
+            aria-current={isActive(n.match) ? "page" : undefined}
           >
-            {LOCALE_SHORT[l]}
+            {n.label}
           </a>
-        ))}
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-4">
+      <div class="hidden items-center gap-1 sm:flex" role="group" aria-label={d.nav.language}>
+        {
+          LOCALES.map((l) => (
+            <a
+              href={localePath(l, pathname)}
+              hreflang={l}
+              title={LOCALE_LABELS[l]}
+              class="label px-1 py-1 transition-opacity duration-200 hover:opacity-100"
+              style={l === locale ? "opacity:1;color:var(--color-brass)" : "opacity:.42"}
+              aria-current={l === locale ? "true" : undefined}
+            >
+              {LOCALE_SHORT[l]}
+            </a>
+          ))
+        }
       </div>
+
+      <button
+        type="button"
+        class="label -mr-1 flex items-center gap-2 py-2 md:hidden"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        data-menu-toggle
+      >
+        <span data-menu-label>{d.nav.menu}</span>
+        <span class="relative block h-[9px] w-4" aria-hidden="true">
+          <span class="absolute inset-x-0 top-0 h-px bg-current transition-transform duration-300" data-bar="1"></span>
+          <span class="absolute inset-x-0 bottom-0 h-px bg-current transition-transform duration-300" data-bar="2"></span>
+        </span>
+      </button>
     </div>
   </div>
 </header>
 
+<div
+  id="mobile-menu"
+  class="fixed inset-0 z-40 hidden flex-col justify-between md:!hidden"
+  data-menu-panel
+  style="background:var(--color-paper)"
+>
+  <div class="h-[var(--header-h,4.5rem)]"></div>
+  <nav class="shell flex flex-1 flex-col justify-center gap-2 pb-10" aria-label="Mobile">
+    {
+      nav.map((n, i) => (
+        <a
+          href={localePath(locale, n.href)}
+          class="t-h1 block py-2"
+          style={`--d:${60 + i * 45}ms`}
+          data-menu-item
+        >
+          {n.label}
+        </a>
+      ))
+    }
+  </nav>
+  <div class="shell rule-t flex flex-wrap items-center justify-between gap-4 py-6">
+    <div class="flex items-center gap-3">
+      {
+        LOCALES.map((l) => (
+          <a
+            href={localePath(l, pathname)}
+            hreflang={l}
+            class="label"
+            style={l === locale ? "opacity:1;color:var(--color-brass)" : "opacity:.5"}
+          >
+            {LOCALE_SHORT[l]}
+          </a>
+        ))
+      }
+    </div>
+    <a href={`mailto:${site.email}`} class="label link">{site.email}</a>
+  </div>
+</div>
+
 <script is:inline>
   (function () {
-    const btn = document.querySelector("[data-mobile-menu-btn]");
-    const menu = document.querySelector("[data-mobile-menu]");
-    if (!btn || !menu) return;
-    let open = false;
-    btn.addEventListener("click", () => {
-      open = !open;
-      btn.setAttribute("aria-expanded", String(open));
-      menu.style.opacity = open ? "1" : "0";
-      menu.style.pointerEvents = open ? "auto" : "none";
-      document.body.style.overflow = open ? "hidden" : "";
-      btn.querySelector("[data-menu-open]").classList.toggle("hidden", open);
-      btn.querySelector("[data-menu-close]").classList.toggle("hidden", !open);
-    });
-    menu.querySelectorAll("a").forEach((a) =>
-      a.addEventListener("click", () => {
-        open = false;
-        menu.style.opacity = "0";
-        menu.style.pointerEvents = "none";
-        document.body.style.overflow = "";
-        btn.setAttribute("aria-expanded", "false");
-        btn.querySelector("[data-menu-open]").classList.remove("hidden");
-        btn.querySelector("[data-menu-close]").classList.add("hidden");
-      })
+    var header = document.querySelector("[data-header]");
+    var veil = document.querySelector("[data-header-veil]");
+    if (!header) return;
+
+    var last = window.scrollY;
+    var hidden = false;
+    var ticking = false;
+
+    function onScroll() {
+      var y = window.scrollY;
+      if (veil) veil.style.opacity = y > 24 ? "1" : "0";
+
+      var menuOpen = document.documentElement.hasAttribute("data-menu-open");
+      if (!menuOpen) {
+        var goingDown = y > last && y > 220;
+        if (goingDown !== hidden) {
+          hidden = goingDown;
+          header.style.transform = hidden ? "translateY(-102%)" : "translateY(0)";
+        }
+      }
+      last = y;
+      ticking = false;
+    }
+
+    addEventListener(
+      "scroll",
+      function () {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(onScroll);
+        }
+      },
+      { passive: true }
     );
+    onScroll();
+
+    /* Mobile menu */
+    var toggle = document.querySelector("[data-menu-toggle]");
+    var panel = document.querySelector("[data-menu-panel]");
+    var labelEl = document.querySelector("[data-menu-label]");
+    var bar1 = document.querySelector('[data-bar="1"]');
+    var bar2 = document.querySelector('[data-bar="2"]');
+    if (!toggle || !panel) return;
+
+    var open = false;
+    var labels = { open: toggle.getAttribute("data-open-label") || "", closed: labelEl ? labelEl.textContent : "" };
+
+    function setOpen(next) {
+      open = next;
+      toggle.setAttribute("aria-expanded", String(open));
+      document.documentElement.toggleAttribute("data-menu-open", open);
+      document.body.style.overflow = open ? "hidden" : "";
+      if (bar1 && bar2) {
+        bar1.style.transform = open ? "translateY(4px) rotate(45deg)" : "";
+        bar2.style.transform = open ? "translateY(-4px) rotate(-45deg)" : "";
+      }
+      if (open) {
+        panel.style.display = "flex";
+        panel.animate(
+          [
+            { opacity: 0, transform: "translateY(-8px)" },
+            { opacity: 1, transform: "translateY(0)" },
+          ],
+          { duration: 260, easing: "cubic-bezier(0.23,1,0.32,1)", fill: "both" }
+        );
+        panel.querySelectorAll("[data-menu-item]").forEach(function (el, i) {
+          el.animate(
+            [
+              { opacity: 0, transform: "translateY(14px)" },
+              { opacity: 1, transform: "translateY(0)" },
+            ],
+            { duration: 460, delay: 60 + i * 45, easing: "cubic-bezier(0.23,1,0.32,1)", fill: "both" }
+          );
+        });
+      } else {
+        var a = panel.animate([{ opacity: 1 }, { opacity: 0 }], {
+          duration: 180,
+          easing: "cubic-bezier(0.23,1,0.32,1)",
+          fill: "both",
+        });
+        a.finished.then(function () {
+          if (!open) panel.style.display = "none";
+        });
+      }
+    }
+
+    toggle.addEventListener("click", function () {
+      setOpen(!open);
+    });
+    addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && open) setOpen(false);
+    });
+    void labels;
   })();
 </script>

@@ -1,27 +1,27 @@
 ---
 import Base from "../../layouts/Base.astro";
 import Hero from "../../components/Hero.astro";
-import Manifesto from "../../components/Manifesto.astro";
+import WorkIndex from "../../components/WorkIndex.astro";
+import Numbers from "../../components/Numbers.astro";
 import Thesis from "../../components/Thesis.astro";
 import FeaturedWork from "../../components/FeaturedWork.astro";
-import Capabilities from "../../components/Capabilities.astro";
 import Brands from "../../components/Brands.astro";
 import CtaBlock from "../../components/CtaBlock.astro";
 import { LOCALES, DEFAULT_LOCALE, type Locale } from "../../i18n/config";
 
-export async function getStaticPaths() {
+export function getStaticPaths() {
   return LOCALES.filter((l) => l !== DEFAULT_LOCALE).map((lang) => ({ params: { lang } }));
 }
 
-const { lang } = Astro.params as { lang: Locale };
+const locale = Astro.params.lang as Locale;
 ---
 
-<Base locale={lang} pathname="/">
-  <Hero locale={lang} />
-  <Manifesto locale={lang} />
-  <Thesis locale={lang} />
-  <FeaturedWork locale={lang} />
-  <Capabilities locale={lang} />
-  <Brands locale={lang} />
-  <CtaBlock locale={lang} />
+<Base locale={locale} pathname="/">
+  <Hero locale={locale} />
+  <WorkIndex locale={locale} />
+  <Numbers locale={locale} />
+  <Thesis locale={locale} />
+  <FeaturedWork locale={locale} />
+  <Brands locale={locale} />
+  <CtaBlock locale={locale} />
 </Base>

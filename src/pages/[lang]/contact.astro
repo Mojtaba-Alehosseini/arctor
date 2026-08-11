@@ -1,13 +1,21 @@
 ---
 import Base from "../../layouts/Base.astro";
 import ContactContent from "../../components/ContactContent.astro";
-import { LOCALES, DEFAULT_LOCALE, type Locale } from "../../i18n/config";
+import { LOCALES, DEFAULT_LOCALE, t, type Locale } from "../../i18n/config";
 
-export async function getStaticPaths() {
+export function getStaticPaths() {
   return LOCALES.filter((l) => l !== DEFAULT_LOCALE).map((lang) => ({ params: { lang } }));
 }
-const { lang } = Astro.params as { lang: Locale };
+
+const locale = Astro.params.lang as Locale;
+const d = t(locale);
 ---
-<Base locale={lang} pathname="/contact">
-  <ContactContent locale={lang} />
+
+<Base
+  locale={locale}
+  pathname="/contact"
+  title={`${d.contact.eyebrow} — ${d.meta.title}`}
+  description={d.contact.body}
+>
+  <ContactContent locale={locale} />
 </Base>

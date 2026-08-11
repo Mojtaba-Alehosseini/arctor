@@ -1,65 +1,48 @@
 ---
-import { t, type Locale, localePath } from "../i18n/config";
-import { getProject } from "../data/projects";
+import AirflowDiagram from "./AirflowDiagram.astro";
+import Mark from "./Mark.astro";
+import { t, localePath, type Locale } from "../i18n/config";
 
-interface Props { locale: Locale }
+interface Props {
+  locale: Locale;
+}
 const { locale } = Astro.props;
-const dict = t(locale);
-const thesis = getProject("windcatcher-thesis");
-const cover = thesis?.cover ?? "";
+const d = t(locale);
 ---
 
-<section class="relative bg-[var(--color-ink)] text-[var(--color-travertine)] overflow-hidden">
-  <div class="container-edge py-32 sm:py-44 grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 items-center">
-    <div class="md:col-span-6 reveal-trigger">
-      <p class="text-eyebrow opacity-60 mb-6">{dict.thesis.eyebrow} — 03 / 06</p>
-      <h2 class="text-display text-[clamp(1.8rem,4vw,3.2rem)] leading-[1.08] mb-8">
-        <span class="reveal-mask block"><span class="reveal-line">{dict.thesis.title}</span></span>
-      </h2>
-      <p class="text-base sm:text-lg opacity-80 leading-relaxed max-w-[60ch] mb-6">{dict.thesis.body}</p>
-      <p class="text-eyebrow opacity-60 mb-8">{dict.thesis.tutors}</p>
-      <a href={localePath(locale, "work/windcatcher-thesis")} class="inline-flex items-center gap-3 text-eyebrow link-underline">
-        <span>{dict.thesis.cta}</span><span aria-hidden="true">→</span>
-      </a>
-    </div>
+<section class="on-dark grain relative overflow-hidden">
+  <div class="shell band">
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-10">
+      <div class="lg:col-span-5" data-reveal>
+        <p class="label reveal" style="opacity:.55">{d.thesis.eyebrow}</p>
+        <div class="reveal mt-7 flex items-start gap-5" style="--d:60ms">
+          <Mark slug="house-of-future" class="mt-1 hidden h-14 w-14 shrink-0 sm:block" style="color:var(--accent)" />
+          <h2 class="t-h2">{d.thesis.title}</h2>
+        </div>
+        <p class="t-lead reveal mt-6" style="--d:110ms;color:var(--accent)">{d.thesis.lead}</p>
+        <p class="t-body reveal measure mt-6" style="--d:150ms">{d.thesis.body}</p>
 
-    <!-- atmospheric thesis image with windcatcher schematic overlay -->
-    <div class="md:col-span-6 relative aspect-[3/4] w-full max-w-[440px] mx-auto overflow-hidden">
-      <img
-        src={cover}
-        alt=""
-        class="absolute inset-0 w-full h-full object-cover"
-        loading="lazy"
-        decoding="async"
-      />
-      <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(14,14,12,0.3) 0%, rgba(14,14,12,0.55) 100%);"></div>
+        <div class="rule-t reveal mt-10 flex items-end gap-6 pt-7" style="--d:200ms">
+          <p class="font-display text-[clamp(2.6rem,5vw,4rem)] leading-none" style="color:var(--accent)">
+            {d.thesis.statValue}
+          </p>
+          <p class="label measure-sm pb-2" style="opacity:.6">{d.thesis.statLabel}</p>
+        </div>
 
-      <!-- schematic overlay -->
-      <svg viewBox="0 0 300 400" class="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg" fill="none" aria-hidden="true">
-        <line x1="0" y1="370" x2="300" y2="370" stroke="rgba(244,239,230,0.5)" stroke-width="0.6" />
-        <rect x="80" y="240" width="140" height="130" stroke="rgba(244,239,230,0.55)" stroke-width="0.8" />
-        <path d="M100 370 v-40 a18 18 0 0 1 36 0 v40 M164 370 v-40 a18 18 0 0 1 36 0 v40" stroke="rgba(244,239,230,0.55)" stroke-width="0.8" />
-        <rect x="115" y="80" width="70" height="170" stroke="rgba(244,239,230,0.75)" stroke-width="0.8" />
-        <path d="M118 80 v-22 a17 17 0 0 1 34 0 v22 M148 80 v-22 a17 17 0 0 1 34 0 v22" stroke="rgba(244,239,230,0.75)" stroke-width="0.8" />
-        <g stroke="rgba(184,69,31,0.95)" stroke-width="1.2" fill="none" stroke-linecap="round">
-          <path d="M150 250 q-2 -25 -8 -50 q-3 -20 -2 -60" />
-          <polygon points="138,90 142,80 146,90" fill="rgba(184,69,31,0.95)" stroke="none" />
-          <path d="M152 250 q2 -25 8 -50 q3 -20 2 -60" />
-          <polygon points="158,90 162,80 166,90" fill="rgba(184,69,31,0.95)" stroke="none" />
-        </g>
-        <g stroke="rgba(244,239,230,0.85)" stroke-width="1" fill="none" stroke-linecap="round">
-          <path d="M40 340 q40 -10 70 -5" />
-          <polygon points="105,332 115,335 105,340" fill="rgba(244,239,230,0.85)" stroke="none" />
-          <path d="M260 340 q-40 -10 -70 -5" />
-          <polygon points="195,332 185,335 195,340" fill="rgba(244,239,230,0.85)" stroke="none" />
-        </g>
-        <circle cx="150" cy="58" r="2.5" fill="rgba(244,239,230,0.95)" />
-        <text x="158" y="62" fill="rgba(244,239,230,0.85)" font-family="Inter Variable, sans-serif" font-size="10">bâdgir</text>
-        <circle cx="60" cy="340" r="2.5" fill="rgba(244,239,230,0.95)" />
-        <text x="14" y="332" fill="rgba(244,239,230,0.85)" font-family="Inter Variable, sans-serif" font-size="10">cool air</text>
-        <circle cx="156" cy="160" r="2.5" fill="rgba(184,69,31,0.95)" />
-        <text x="165" y="164" fill="rgba(184,69,31,0.95)" font-family="Inter Variable, sans-serif" font-size="10">warm air</text>
-      </svg>
+        <div class="reveal mt-9" style="--d:250ms">
+          <a class="btn" href={localePath(locale, "/work/house-of-future/")}>
+            {d.thesis.cta}
+            <span class="arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="lg:col-span-7" data-reveal>
+        <p class="label mb-8" style="opacity:.42">{d.thesis.diagram.title}</p>
+        <div class="reveal" style="--d:120ms">
+          <AirflowDiagram locale={locale} />
+        </div>
+      </div>
     </div>
   </div>
 </section>

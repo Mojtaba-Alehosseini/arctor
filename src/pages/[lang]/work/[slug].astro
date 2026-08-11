@@ -1,68 +1,29 @@
 ---
 import Base from "../../../layouts/Base.astro";
-import { projects } from "../../../data/projects";
-import { LOCALES, DEFAULT_LOCALE, t, localePath, type Locale } from "../../../i18n/config";
+import ProjectDetail from "../../../components/ProjectDetail.astro";
+import CtaBlock from "../../../components/CtaBlock.astro";
+import { projects, projectCopy } from "../../../data/projects";
+import { LOCALES, DEFAULT_LOCALE, type Locale } from "../../../i18n/config";
 
-export async function getStaticPaths() {
+export function getStaticPaths() {
   const langs = LOCALES.filter((l) => l !== DEFAULT_LOCALE);
-  return langs.flatMap((lang) => projects.map((p) => ({ params: { lang, slug: p.slug } })));
+  return langs.flatMap((lang) =>
+    projects.map((project) => ({ params: { lang, slug: project.slug }, props: { project } }))
+  );
 }
 
-const { lang, slug } = Astro.params as { lang: Locale; slug: string };
-const project = projects.find((p) => p.slug === slug)!;
-const dict = t(lang);
-const proj = project.i18n[lang] ?? project.i18n[DEFAULT_LOCALE];
-const idx = projects.findIndex((p) => p.slug === slug);
-const next = projects[(idx + 1) % projects.length];
+const { project } = Astro.props;
+const locale = Astro.params.lang as Locale;
+const c = projectCopy(project.slug, locale);
 ---
 
-<Base locale={lang} pathname={`/work/${slug}`} title={proj.title}>
-  <article class="bg-[var(--color-travertine)] text-[var(--color-ink)]">
-    <header class="relative h-[78svh] min-h-[520px] w-full overflow-hidden bg-[var(--color-ink)] text-[var(--color-travertine)]">
-      <img src={project.cover} alt="" class="absolute inset-0 w-full h-full object-cover opacity-85" loading="eager" fetchpriority="high" />
-      <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(14,14,12,0.35) 0%, rgba(14,14,12,0.55) 60%, rgba(14,14,12,0.92) 100%);"></div>
-      <div class="absolute inset-x-0 bottom-0 container-edge pb-12 sm:pb-16">
-        <p class="text-eyebrow opacity-80 mb-4">{project.category} · {project.year} · {project.location}</p>
-        <h1 class="text-display text-[clamp(2.2rem,6vw,5.5rem)] leading-[1.02] max-w-[22ch]">{proj.title}</h1>
-        <p class="mt-4 text-lg sm:text-xl opacity-85 max-w-[60ch]">{proj.subtitle}</p>
-      </div>
-    </header>
-
-    <section class="container-edge grid grid-cols-1 md:grid-cols-12 gap-10 pt-20 pb-12">
-      <aside class="md:col-span-3 md:sticky md:top-32 self-start text-sm">
-        <dl class="space-y-4">
-          <div><dt class="text-eyebrow opacity-60">{dict.work.yearLabel}</dt><dd class="mt-1">{project.year}</dd></div>
-          <div><dt class="text-eyebrow opacity-60">{dict.work.roleLabel}</dt><dd class="mt-1">{project.role}</dd></div>
-          <div><dt class="text-eyebrow opacity-60">{dict.work.locationLabel}</dt><dd class="mt-1">{project.location}</dd></div>
-          <div><dt class="text-eyebrow opacity-60">{dict.work.toolsLabel}</dt><dd class="mt-1">{project.tools.join(" · ")}</dd></div>
-        </dl>
-      </aside>
-
-      <div class="md:col-span-8 md:col-start-5">
-        <p class="text-display text-2xl sm:text-3xl leading-[1.25] mb-10 max-w-[40ch]">{proj.brief}</p>
-        <div class="space-y-8 text-base sm:text-lg leading-relaxed max-w-[64ch] opacity-90">
-          {proj.body.map((para, i) => (
-            <>
-              <p>{para}</p>
-              {i === 0 && project.detail && (
-                <figure class="my-12 -mx-4 sm:mx-0">
-                  <img src={project.detail} alt="" loading="lazy" class="w-full aspect-[16/9] object-cover" />
-                </figure>
-              )}
-            </>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="border-t border-[color-mix(in_oklab,var(--color-ink)_15%,transparent)] container-edge py-16 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6">
-      <a href={localePath(lang, "work")} class="text-eyebrow link-underline">← {dict.work.backToWork}</a>
-      <a href={localePath(lang, `work/${next.slug}`)} class="group block">
-        <p class="text-eyebrow opacity-60 sm:text-end">{dict.work.nextProject}</p>
-        <p class="text-display text-[clamp(1.6rem,3.6vw,2.8rem)] leading-[1.05] mt-2 sm:text-end transition-transform group-hover:-translate-x-2">
-          {(next.i18n[lang] ?? next.i18n[DEFAULT_LOCALE]).title} →
-        </p>
-      </a>
-    </section>
-  </article>
+<Base
+  locale={locale}
+  pathname={`/work/${project.slug}`}
+  title={`${c.title} — Shirin Keshmirinejad`}
+  description={c.brief}
+  ogImage={`/images/${project.slug}/${project.cover.src}`}
+>
+  <ProjectDetail locale={locale} project={project} />
+  <CtaBlock locale={locale} />
 </Base>

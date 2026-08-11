@@ -1,0 +1,213 @@
+---
+import { t, type Locale } from "../i18n/config";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const g = t(locale).thesis.diagram;
+---
+
+<figure class="airflow" aria-labelledby="airflow-title">
+  <svg viewBox="-56 -34 936 630" role="img" aria-labelledby="airflow-title airflow-desc">
+    <title id="airflow-title">{g.title}</title>
+    <desc id="airflow-desc">
+      {g.windcatcherNote} {g.chimneyNote} {g.shaftNote}
+    </desc>
+
+    <defs>
+      <marker id="af-cool" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+        <path d="M0,1 L9,5 L0,9 Z" fill="var(--cool)"></path>
+      </marker>
+      <marker id="af-warm" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+        <path d="M0,1 L9,5 L0,9 Z" fill="var(--warm)"></path>
+      </marker>
+      <pattern id="af-hatch" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="0" x2="0" y2="7" stroke="currentColor" stroke-width="1" opacity=".22"></line>
+      </pattern>
+    </defs>
+
+    <!-- ground -->
+    <g class="af-line">
+      <line x1="20" y1="452" x2="800" y2="452"></line>
+      <rect x="20" y="452" width="780" height="62" fill="url(#af-hatch)" stroke="none"></rect>
+    </g>
+
+    <!-- building section -->
+    <g class="af-line">
+      <!-- outer envelope -->
+      <path d="M120 452 L120 214 L200 214 L200 138 L268 138 L268 214 L360 214 L360 176 L470 176 L470 214 L560 214 L560 118 L628 118 L628 214 L700 214 L700 452"></path>
+      <!-- basement -->
+      <path d="M120 452 L120 514 L700 514 L700 452" opacity=".55"></path>
+      <!-- floor slabs -->
+      <line x1="120" y1="330" x2="700" y2="330"></line>
+      <line x1="120" y1="452" x2="700" y2="452"></line>
+      <!-- inner walls -->
+      <line x1="300" y1="330" x2="300" y2="452" opacity=".5"></line>
+      <line x1="520" y1="330" x2="520" y2="452" opacity=".5"></line>
+      <line x1="300" y1="214" x2="300" y2="330" opacity=".5"></line>
+      <line x1="520" y1="214" x2="520" y2="330" opacity=".5"></line>
+      <!-- arches (majlis) -->
+      <path d="M150 452 L150 400 A22 22 0 0 1 194 400 L194 452" opacity=".5"></path>
+      <path d="M626 452 L626 400 A22 22 0 0 1 670 400 L670 452" opacity=".5"></path>
+    </g>
+
+    <!-- courtyard canopy (girih shade) -->
+    <g class="af-line af-canopy">
+      <path d="M356 176 Q415 128 474 176" fill="none"></path>
+      <path d="M368 172 Q415 138 462 172" fill="none" opacity=".45"></path>
+      <line x1="379" y1="150" x2="391" y2="176" opacity=".35"></line>
+      <line x1="415" y1="139" x2="415" y2="176" opacity=".35"></line>
+      <line x1="451" y1="150" x2="439" y2="176" opacity=".35"></line>
+    </g>
+
+    <!-- wind catcher louvres -->
+    <g class="af-line" opacity=".6">
+      <line x1="208" y1="150" x2="260" y2="150"></line>
+      <line x1="208" y1="166" x2="260" y2="166"></line>
+      <line x1="208" y1="182" x2="260" y2="182"></line>
+      <line x1="208" y1="198" x2="260" y2="198"></line>
+    </g>
+    <!-- solar chimney mirrored panels -->
+    <g class="af-line af-mirror" opacity=".75">
+      <line x1="566" y1="132" x2="566" y2="206"></line>
+      <line x1="622" y1="132" x2="622" y2="206"></line>
+    </g>
+
+    <!-- central shaft -->
+    <g class="af-line">
+      <line x1="398" y1="176" x2="398" y2="500" opacity=".55"></line>
+      <line x1="432" y1="176" x2="432" y2="500" opacity=".55"></line>
+    </g>
+
+    <!-- ── COOL AIR ─────────────────────────────────────────────── -->
+    <g class="af-flow af-cool">
+      <path d="M234 92 L234 200 L234 300" marker-end="url(#af-cool)"></path>
+      <path d="M234 320 L234 400 L300 420" marker-end="url(#af-cool)"></path>
+      <path d="M92 484 L200 484 L280 470" marker-end="url(#af-cool)"></path>
+      <path d="M415 500 L415 470" marker-end="url(#af-cool)"></path>
+    </g>
+
+    <!-- ── WARM AIR ─────────────────────────────────────────────── -->
+    <g class="af-flow af-warm">
+      <path d="M594 300 L594 200 L594 74" marker-end="url(#af-warm)"></path>
+      <path d="M520 400 L560 380 L586 330" marker-end="url(#af-warm)"></path>
+      <path d="M415 430 L415 300 L415 200 L415 140" marker-end="url(#af-warm)"></path>
+      <path d="M700 250 L760 250" marker-end="url(#af-warm)"></path>
+    </g>
+
+    <!-- callouts -->
+    <g class="af-label">
+      <line x1="234" y1="138" x2="234" y2="46" class="af-leader"></line>
+      <line x1="234" y1="46" x2="256" y2="46" class="af-leader"></line>
+      <text x="262" y="50">1 · {g.windcatcher}</text>
+
+      <line x1="594" y1="118" x2="594" y2="46" class="af-leader"></line>
+      <line x1="594" y1="46" x2="572" y2="46" class="af-leader"></line>
+      <text x="566" y="50" text-anchor="end">2 · {g.chimney}</text>
+
+      <line x1="432" y1="392" x2="734" y2="392" class="af-leader"></line>
+      <text x="740" y="396">3 · {g.shaft}</text>
+
+      <line x1="415" y1="128" x2="415" y2="-6" class="af-leader"></line>
+      <text x="415" y="-14" text-anchor="middle">4 · {g.canopy}</text>
+
+      <line x1="415" y1="514" x2="415" y2="558" class="af-leader"></line>
+      <text x="415" y="576" text-anchor="middle">5 · {g.floor}</text>
+    </g>
+  </svg>
+
+  <figcaption class="mt-6 flex flex-wrap items-center gap-x-7 gap-y-2">
+    <span class="label inline-flex items-center gap-2">
+      <span class="inline-block h-[2px] w-6" style="background:var(--cool)"></span>
+      {g.cool}
+    </span>
+    <span class="label inline-flex items-center gap-2">
+      <span class="inline-block h-[2px] w-6" style="background:var(--warm)"></span>
+      {g.warm}
+    </span>
+  </figcaption>
+</figure>
+
+<style>
+  .airflow {
+    --cool: #8fc2e0;
+    --warm: #e6a566;
+    width: 100%;
+  }
+  .airflow svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .af-line {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.15;
+    stroke-linecap: square;
+    opacity: 0.62;
+  }
+  .af-canopy {
+    stroke-width: 1.35;
+    opacity: 0.8;
+  }
+  .af-mirror {
+    stroke-dasharray: 5 4;
+  }
+  .af-flow path {
+    fill: none;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 9 8;
+  }
+  .af-cool path {
+    stroke: var(--cool);
+  }
+  .af-warm path {
+    stroke: var(--warm);
+  }
+  .af-label text {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    fill: currentColor;
+    opacity: 0.72;
+  }
+  .af-leader {
+    stroke: currentColor;
+    stroke-width: 1;
+    opacity: 0.3;
+  }
+
+  /* Marching arrows — motion only where it explains something. */
+  .in-view .af-flow path {
+    animation: af-march 1.8s linear infinite;
+  }
+  .in-view .af-warm path {
+    animation-duration: 2.3s;
+  }
+  @keyframes af-march {
+    to {
+      stroke-dashoffset: -34;
+    }
+  }
+
+  html[lang="fa"] .af-label text {
+    font-family: var(--font-fa);
+    letter-spacing: 0;
+    font-size: 13px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .in-view .af-flow path {
+      animation: none;
+    }
+  }
+  @media (max-width: 640px) {
+    .af-label text {
+      font-size: 16px;
+    }
+  }
+</style>
