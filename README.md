@@ -1,25 +1,25 @@
-# Shirin Keshmirinejad — portfolio
+# Shirin Keshmirinejad: portfolio
 
 Personal website for **Shirin Keshmirinejad**, multidisciplinary architect and interior
 designer based in Genoa, Italy.
 
-Built with **Astro 5**, **Tailwind CSS 4**, and no client framework — the whole site
+Built with **Astro 5**, **Tailwind CSS 4**, and no client framework; the whole site
 ships a few kilobytes of hand-written JavaScript.
 
 ## The design
 
 Every visual decision comes from Shirin's own material rather than a template:
 
-- **Palette** — the deep forest green and antique gold of her CV, the dusty rose of her
+- **Palette**: the deep forest green and antique gold of her CV, the dusty rose of her
   portfolio cover, on a warm paper ground. Nothing invented.
-- **Marks** — the ten black glyphs she drew for her portfolio (one per project) were
+- **Marks**: the ten black glyphs she drew for her portfolio (one per project) were
   traced from the PDF into SVG (`src/lib/marks.ts`) and now run through the whole
   interface: the work index, project headers, the footer marquee, the favicon. Her
   blocky monogram is the site logo.
-- **Type** — Instrument Serif for display, Instrument Sans for text, IBM Plex Mono for
+- **Type**: Instrument Serif for display, Instrument Sans for text, IBM Plex Mono for
   metadata (an architect's drawing labels are monospaced), Vazirmatn for Persian.
-- **Layout** — a faint six-column drawing-sheet grid, hairline rules, numbered sections.
-- **Motion** — CSS transitions on a strong ease-out curve, a clip-path wipe for images,
+- **Layout**: a faint six-column drawing-sheet grid, hairline rules, numbered sections.
+- **Motion**: CSS transitions on a strong ease-out curve, a clip-path wipe for images,
   and a pointer-tracked cover preview on the work index driven by a critically damped
   spring. All of it disabled under `prefers-reduced-motion`.
 
@@ -43,7 +43,7 @@ the wind catcher, solar chimney, central shaft and floor inlets with animated ai
 | فارسی | `fa` | **rtl** | `/fa/` |
 
 Seventy-five static pages: home, work index, ten project pages, about, practice and
-contact — in five languages, with full RTL support for Persian.
+contact, in five languages, with full RTL support for Persian.
 
 ## Run locally
 
@@ -68,7 +68,7 @@ src/
 │   └── site.ts   # contact details and constants
 ├── layouts/
 ├── pages/        # root paths for English, [lang]/ for the rest
-└── styles/       # global.css — tokens, type scale, motion
+└── styles/       # global.css, tokens, type scale, motion
 public/
 ├── images/<project>/   # cover, card and portfolio plates
 ├── marks/              # the glyphs as standalone SVG
